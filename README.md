@@ -1,6 +1,7 @@
 # 코드 카타 저장소
 
-![Java_11](https://img.shields.io/badge/java-11-red?logo=java)
+![Java_17](https://img.shields.io/badge/java-17-red?logo=java)
+![Kotlin_17](https://img.shields.io/badge/Kotlin-17-purple?logo=kotlin)
 [![GitHub stars](https://img.shields.io/github/stars/gunkim/code-kata)](https://github.com/gunkim/code-kata/stargazers)
 [![GitHub issues](https://img.shields.io/github/issues/gunkim/code-kata)](https://github.com/gunkim/code-kata/issues)
 [![GitHub forks](https://img.shields.io/github/forks/gunkim/code-kata)](https://github.com/gunkim/code-kata/network)
