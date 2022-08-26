@@ -24,8 +24,7 @@ class CarRaceTrack(
 
     fun round(max: Int): Unit = repeat(max) {
         cars.forEach { if (movePolicy.isMove()) it.go() }
-        isRound = true
-    }
+    }.also { isRound = true }
 
     companion object {
         private fun generateCars(line: String, delimiters: String = ","): List<Car> =
