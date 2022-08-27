@@ -29,8 +29,8 @@ class CarRaceTrack(
     companion object {
         private fun generateCars(line: String, delimiters: String = ","): List<Car> =
             line.split(delimiters)
-                .filter { it.isNotBlank() }
-                .map { it.replace(" ", "") }
+                .filter(String::isNotBlank)
+                .map(String::removeBlank)
                 .map(::Car)
                 .toList()
 
@@ -42,3 +42,5 @@ class CarRaceTrack(
             )
     }
 }
+
+private fun String.removeBlank() = this.replace(" ", "")
