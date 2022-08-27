@@ -1,9 +1,9 @@
 package io.github.gunkim.domain.policy
 
-import kotlin.random.Random
+import java.util.random.RandomGenerator
 
 class RandomMovePolicy(
-    private val random: Random = Random(10)
+    private val random: RandomGenerator = RandomGenerator.getDefault(),
 ) : MovePolicy {
-    override fun isMove(): Boolean = random.nextInt() >= 4
+    override fun isMove(): Boolean = random.nextInt(10) >= 4
 }
