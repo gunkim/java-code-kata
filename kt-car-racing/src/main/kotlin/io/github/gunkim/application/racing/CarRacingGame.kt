@@ -24,7 +24,7 @@ class CarRacingGame(
         output.roundInput()
         application.round(input.inputInt())
 
-        output.dashboard(application.cars)
+        output.dashboard(application.carList)
         output.winners(application.winners)
     }
 
