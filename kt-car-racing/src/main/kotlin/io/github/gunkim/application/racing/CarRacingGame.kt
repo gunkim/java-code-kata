@@ -17,11 +17,11 @@ class CarRacingGame(
     private val winnerPolicy: WinnerPolicy,
 ) {
     fun run() {
-        output.carNameInput()
-        val application = CarRaceTrack.of(input.input(), movePolicy, winnerPolicy)
+        output.carnameInputMessage()
+        val application = CarRaceTrack.of(input.carname, movePolicy, winnerPolicy)
 
-        output.roundInput()
-        application.round(input.inputInt())
+        output.maxRoundInputMessage()
+        application.round(input.maxRound)
 
         output.dashboard(application.carList)
         output.winners(application.winners)
