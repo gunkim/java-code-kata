@@ -1,3 +1,9 @@
 package io.github.gunkim
 
-fun main() = Calculator.init().run()
+import io.github.gunkim.io.console.ConsoleInput
+import io.github.gunkim.io.console.ConsoleOutput
+
+fun main() = Calculator(
+    ConsoleInput(),
+    ConsoleOutput()
+).run()
