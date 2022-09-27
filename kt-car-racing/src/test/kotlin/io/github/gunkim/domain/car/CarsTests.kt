@@ -1,6 +1,8 @@
 package io.github.gunkim.domain.car
 
-import org.assertj.core.api.Assertions.*
+import io.github.gunkim.domain.car.vo.Forward
+import io.github.gunkim.domain.car.vo.Name
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 
@@ -9,15 +11,14 @@ class CarsTests {
     fun `차들을 움직인다`() {
         val sut = Cars(
             listOf(
-                Car("gunny"),
-                Car("앵미"),
-                Car("망주")
+                Car(Name("gunny")),
+                Car(Name("앵미")),
+                Car(Name("망주"))
             )
-        )
+        ).run { go { true } }
 
-        sut.go { true }
-
-        assertThat(sut.list).extracting("forward").contains(1, 1, 1)
+        val expectedForward = Forward(1)
+        assertThat(sut.list).extracting("forward").contains(expectedForward, expectedForward, expectedForward)
     }
 
     @Test

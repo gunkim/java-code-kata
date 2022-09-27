@@ -1,6 +1,8 @@
 package io.github.gunkim.domain.policy
 
 import io.github.gunkim.domain.car.Car
+import io.github.gunkim.domain.car.vo.Forward
+import io.github.gunkim.domain.car.vo.Name
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -11,12 +13,12 @@ class MaxScoreWinnerPolicyTests {
     fun `우승자를 반환한다`() {
         val winners = sut.winner(
             listOf(
-                Car("거니", 1),
-                Car("앵미", 2),
-                Car("망주", 3),
-                Car("주니", 3),
+                Car(Name("거니"), Forward(1)),
+                Car(Name("앵미"), Forward(2)),
+                Car(Name("망주"), Forward(3)),
+                Car(Name("주니"), Forward(3)),
             )
         )
-        assertThat(winners).extracting("name").contains("망주", "주니")
+        assertThat(winners).extracting("name").contains(Name("망주"), Name("주니"))
     }
 }

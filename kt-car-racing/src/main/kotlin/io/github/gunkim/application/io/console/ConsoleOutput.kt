@@ -9,16 +9,19 @@ class ConsoleOutput : Output {
     override fun maxRoundInputMessage() = println("시도할 회수는 몇회인가요?")
 
     override fun dashboard(cars: List<Car>) = cars.forEach { (name, forward) ->
-        val distance = IntRange(0, forward).joinToString("") { "-" }
-        println("$name : $distance")
+        val distance = IntRange(0, forward.value).joinToString("") { "-" }
+        println("${name.value} : $distance")
     }
 
     override fun winners(winners: List<Car>) {
         val queue = ArrayDeque(winners)
-        print(queue.removeFirst().name)
+        val sb = StringBuilder()
+        sb.append(getCar(queue).nameValue)
         while (queue.isNotEmpty()) {
-            print(", ${queue.removeFirst().name}")
+            sb.append(", ${queue.removeFirst().name.value}")
         }
-        println("가 최종 우승했습니다.")
+        sb.append("가 최종 우승했습니다.")
+        println(sb)
     }
+    private fun getCar(queue: ArrayDeque<Car>): Car = queue.removeFirst()
 }
