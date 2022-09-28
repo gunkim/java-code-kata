@@ -7,6 +7,7 @@ import io.github.gunkim.application.io.console.ConsoleOutput
 import io.github.gunkim.domain.car.Car
 import io.github.gunkim.domain.car.CarRaceTrack
 import io.github.gunkim.domain.car.Cars
+import io.github.gunkim.domain.car.vo.Lab
 import io.github.gunkim.domain.car.vo.Name
 import io.github.gunkim.domain.policy.MaxScoreWinnerPolicy
 import io.github.gunkim.domain.policy.MovePolicy
@@ -23,7 +24,7 @@ class CarRacingGame(
         output.carnameInputMessage()
         val track = createTrack(createCars(input.carname), movePolicy, winnerPolicy)
             .also { output.maxRoundInputMessage() }
-            .run { round(input.maxRound) }
+            .run { round(Lab(input.maxRound)) }
 
         output.dashboard(track.carList)
         output.winners(track.winners)

@@ -1,5 +1,6 @@
 package io.github.gunkim.domain.car
 
+import io.github.gunkim.domain.car.vo.Lab
 import io.github.gunkim.domain.policy.MovePolicy
 import io.github.gunkim.domain.policy.WinnerPolicy
 
@@ -13,9 +14,9 @@ data class CarRaceTrack(
     val carList: List<Car>
         get() = cars.list
 
-    fun round(max: Int): CarRaceTrack {
+    fun round(lab: Lab): CarRaceTrack {
         var cars = cars
-        for (i in 0..max) {
+        repeat(lab.value) {
             cars = cars.go(movePolicy)
         }
         return CarRaceTrack(cars, movePolicy, winnerPolicy)
