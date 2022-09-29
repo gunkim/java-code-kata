@@ -1,14 +1,14 @@
 package io.github.gunkim.domain.car
 
-import io.github.gunkim.domain.car.vo.Forward
+import io.github.gunkim.domain.car.vo.Position
 import io.github.gunkim.domain.car.vo.Name
 
 data class Car(
     val name: Name,
-    val forward: Forward = Forward(0),
+    val position: Position = Position(0),
 ) {
-    val forwardValue: Int = forward.value
+    val forwardValue: Int = position.value
     val nameValue: String = name.value
 
-    fun go(): Car = Car(name, forward + 1)
+    fun go(): Car = Car(name, position + 1)
 }

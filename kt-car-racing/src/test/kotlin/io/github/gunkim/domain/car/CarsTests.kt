@@ -1,6 +1,6 @@
 package io.github.gunkim.domain.car
 
-import io.github.gunkim.domain.car.vo.Forward
+import io.github.gunkim.domain.car.vo.Position
 import io.github.gunkim.domain.car.vo.Name
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -17,8 +17,8 @@ class CarsTests {
             )
         ).run { go { true } }
 
-        val expectedForward = Forward(1)
-        assertThat(sut.list).extracting("forward").contains(expectedForward, expectedForward, expectedForward)
+        val expectedPosition = Position(1)
+        assertThat(sut.list).extracting("forward").contains(expectedPosition, expectedPosition, expectedPosition)
     }
 
     @Test
