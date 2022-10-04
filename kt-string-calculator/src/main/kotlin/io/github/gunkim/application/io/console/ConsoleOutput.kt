@@ -1,6 +1,6 @@
-package io.github.gunkim.io.console
+package io.github.gunkim.application.io.console
 
-import io.github.gunkim.io.Output
+import io.github.gunkim.application.io.Output
 
 class ConsoleOutput: Output {
     override fun inputMessage() = println("숫자를 입력해주세요.")

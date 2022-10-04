@@ -1,4 +1,4 @@
-package io.github.gunkim.io
+package io.github.gunkim.application.io
 
 interface Input {
     fun read(): String

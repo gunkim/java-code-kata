@@ -1,8 +1,8 @@
 package io.github.gunkim
 
 import io.github.gunkim.domain.ExpressionFactory
-import io.github.gunkim.io.Input
-import io.github.gunkim.io.Output
+import io.github.gunkim.application.io.Input
+import io.github.gunkim.application.io.Output
 
 class Calculator(
     private val input: Input,
