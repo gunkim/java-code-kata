@@ -30,6 +30,7 @@ class RacingGame:
         else:
             print(f"winners are {', '.join([name for name in sorted(winner_names)])}")
 
+
 def input_cars() -> list[Car]:
     return [Car(name, randrange(1, 10)) for name in input("Enter names separated by comma.\n").split(',')]
 
