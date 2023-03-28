@@ -1,4 +1,4 @@
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from random import randint, randrange
 from typing import Callable
 
@@ -7,7 +7,7 @@ from typing import Callable
 class Car:
     name: str
     speed: int
-    position: int = field(default=1)
+    position: int = 1
 
     def __post_init__(self):
         assert self.speed > 0, "speed must be greater than 0"
@@ -16,6 +16,12 @@ class Car:
     def move(self, get_random: Callable[[int, int], int]):
         distance: int = get_random(1, self.speed)
         self.position = self.position + distance
+
+    def __eq__(self, other):
+        return self.position == other.position
+
+    def __lt__(self, other):
+        return self.position < other.position
 
 
 @dataclass
@@ -32,9 +38,8 @@ class RacingGame:
                 car.move(lambda start, end: randint(start, end))
                 print(f"{car.name}:{car.position * '-'}")
 
-        max_pos: int = max(self.cars, key=lambda x: x.position).position
-        winner_names: list[str] = [car.name for car in self.cars if
-                                   car.position == max_pos]
+        max_pos: int = max(self.cars).position
+        winner_names: list[str] = [car.name for car in self.cars if car.position == max_pos]
         if len(winner_names) == 1:
             print(f"winner is {winner_names[0]}")
         else:
