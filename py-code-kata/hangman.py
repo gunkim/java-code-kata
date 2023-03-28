@@ -11,7 +11,7 @@ class Hangman:
             |       
             |      
             -
-        """
+        """,
         """
              _______
             |       |
@@ -71,10 +71,14 @@ class Hangman:
     def __init__(self):
         self.__idx = 0
 
-    def next(self):
-        self.__idx = self.__idx + 1
+    def __iter__(self):
+        return self
 
-    def display(self):
+    def __next__(self):
+        self.__idx = self.__idx + 1
+        return self
+
+    def __str__(self):
         return self.STAGES[self.__idx]
 
     def isOver(self):
@@ -85,12 +89,11 @@ def main():
     answer: str = random.choice(read_keyword_file())
 
     guessed_letters: set[str] = set()
-    hangman = Hangman()
 
     print("행맨 게임 시작!")
-    while True:
+    for hangman in Hangman():
         print(f"주어진 키워드: {masking_display_keyword(answer, guessed_letters)}")
-        print(hangman.display())
+        print(hangman)
 
         if hangman.isOver():
             print(f"게임 오버입니다. 정답은 [{answer}]였습니다!")
@@ -111,7 +114,6 @@ def main():
                 print("정답입니다!")
         else:
             print("오답입니다.")
-            hangman.next()
 
 
 def read_keyword_file() -> list[str]:
