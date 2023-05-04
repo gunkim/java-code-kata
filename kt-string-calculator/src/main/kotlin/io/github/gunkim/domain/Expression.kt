@@ -13,9 +13,10 @@ class Expression private constructor(
         require((numbers.size - 1) == operators.size) { "연산자는 계산할 값보다 1개 적어야 합니다." }
     }
 
+    val operator: Operator
+        get() = operators.removeFirst()
+
     fun execute(): Int = numbers.reduce(this::execute)
 
-    private fun execute(num1: Int, num2: Int): Int = getOperator().execute(num1, num2)
-
-    private fun getOperator(): Operator = operators.removeFirst()
+    private fun execute(num1: Int, num2: Int) = operator.execute(num1, num2)
 }

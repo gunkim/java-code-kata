@@ -9,13 +9,11 @@ enum class Operator(
     MULTPLY("*", { num1, num2 -> num1 * num2 }),
     DIVIDE("/", { num1, num2 -> num1 / num2 });
 
-    fun execute(num1: Int, num2: Int): Int = func(num1, num2)
+    fun execute(num1: Int, num2: Int) = func(num1, num2)
 
     companion object {
-        fun get(operator: String): Operator {
-            return values()
-                .firstOrNull { it.operator == operator }
-                ?: throw IllegalArgumentException("연산자를 찾을 수 없습니다.")
-        }
+        fun get(operator: String) = values()
+            .firstOrNull { it.operator == operator }
+            ?: throw IllegalArgumentException("연산자를 찾을 수 없습니다.")
     }
 }
