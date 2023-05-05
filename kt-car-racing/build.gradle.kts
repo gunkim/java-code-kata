@@ -14,6 +14,7 @@ repositories {
 dependencies {
     testImplementation("org.assertj:assertj-core:3.23.1")
     testImplementation("org.junit.jupiter:junit-jupiter:5.9.0")
+    testImplementation("io.kotest:kotest-runner-junit5-jvm:5.6.1")
 }
 
 tasks.test {
