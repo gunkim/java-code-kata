@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.7.10"
+    kotlin("jvm") version "1.8.20"
 }
 
 group = "io.github.gunkim"
@@ -12,8 +12,7 @@ repositories {
 }
 
 dependencies {
-    testImplementation("org.junit.jupiter:junit-jupiter:5.9.0")
-    testImplementation("org.assertj:assertj-core:3.23.1")
+    testImplementation("io.kotest:kotest-runner-junit5:5.6.1")
 }
 
 tasks.test {

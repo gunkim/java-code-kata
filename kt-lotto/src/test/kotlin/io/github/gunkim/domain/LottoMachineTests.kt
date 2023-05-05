@@ -1,35 +1,19 @@
 package io.github.gunkim.domain
 
-import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertDoesNotThrow
-import org.junit.jupiter.api.assertThrows
+import io.kotest.assertions.throwables.shouldThrow
+import io.kotest.core.annotation.DisplayName
+import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.collections.shouldHaveSize
 
-class LottoMachineTests {
-    @Test
-    fun `인스턴스가 생성된다`() {
+@DisplayName("로또 발권기는")
+class LottoMachineTests : StringSpec({
+    "받은 돈 만큼 로또 티켓을 발행한다" {
         var i = 1
-        assertDoesNotThrow {
-            LottoMachine {
-                i++
-            }
-        }
-    }
+        val lottos = LottoMachine { i++ }.buy(2_500)
 
-    @Test
-    fun `로또 티켓을 돈만큼 발행한다`() {
-        var i = 1
-        val lottos = LottoMachine {
-            i++
-        }.buy(2_500)
-
-        assertThat(lottos).hasSize(2)
+        lottos shouldHaveSize 2
     }
-
-    @Test
-    fun `티켓 한장 가격보다 적은 돈일 경우 예외가 발생한다`() {
-        assertThrows<IllegalArgumentException> {
-            LottoMachine { 1 }.buy(500)
-        }
+    "티켓 한장 가격보다 적은 돈을 받을 경우 예외가 발생한다" {
+        shouldThrow<IllegalArgumentException> { LottoMachine { 1 }.buy(500) }
     }
-}
+})
