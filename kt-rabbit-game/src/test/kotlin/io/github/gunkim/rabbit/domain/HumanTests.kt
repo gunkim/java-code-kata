@@ -20,12 +20,16 @@ class HumanTests : StringSpec({
     "왼쪽으로 움직일 수 있다." {
         val human = Human(humanId, Position(10))
 
-        human.leftMove(Position(3)) shouldBe Human(humanId, Position(7))
+        val result = human.leftMove(Position(3))
+
+        result shouldBe Human(humanId, Position(7))
     }
     "오른쪽으로 움직일 수 있다." {
         val human = Human(humanId, Position(10))
 
-        human.rightMove(Position(3)) shouldBe Human(humanId, Position(13))
+        val result = human.rightMove(Position(3))
+
+        result shouldBe Human(humanId, Position(13))
     }
     "왼쪽으로 한번에 10칸을 초과해서 이동할 경우 예외가 발생한다." {
         val human = Human(humanId, Position(15))

@@ -1,7 +1,7 @@
 package io.github.gunkim.rabbit.domain
 
 import io.github.gunkim.rabbit.domain.rabbit.Rabbit
-import java.util.UUID
+import java.util.*
 
 data class Human(
     val id: UUID = UUID.randomUUID(),
@@ -12,11 +12,9 @@ data class Human(
 
     fun catch(rabbit: Rabbit): Boolean = rabbit.isSamePosition(this.position)
 
-    fun move(direction: Direction, position: Position): Human {
-        return when (direction) {
-            Direction.LEFT -> Human(id, this.position - position)
-            Direction.RIGHT -> Human(id, this.position + position)
-        }
+    fun move(direction: Direction, position: Position) = when (direction) {
+        Direction.LEFT -> Human(id, this.position - position)
+        Direction.RIGHT -> Human(id, this.position + position)
     }
 
     fun leftMove(position: Position): Human {
