@@ -10,5 +10,5 @@ data class Car(
     val forwardValue: Int = position.value
     val nameValue: String = name.value
 
-    fun go(): Car = Car(name, position + 1)
+    fun go() = Car(name, position + 1)
 }
