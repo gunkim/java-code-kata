@@ -22,7 +22,7 @@ class CarRacingGame(
 ) {
     fun run() {
         output.carnameInputMessage()
-        val track = createTrack(createCars(input.carname), movePolicy, winnerPolicy)
+        val track = createTrack(cars(input.carname), movePolicy, winnerPolicy)
             .also { output.maxRoundInputMessage() }
             .run { round(Lab(input.maxRound)) }
 
@@ -40,29 +40,27 @@ class CarRacingGame(
         winnerPolicy
     )
 
-    private fun createCars(line: String) = Cars(
-        line.let(::parsingString)
-            .let(::createCarList)
+    private fun cars(line: String) = Cars(
+        line.let(::parseString)
+            .let(::convertCar)
     )
 
-    private fun parsingString(carNames: String, delimiters: String = ","): List<String> =
+    private fun parseString(carNames: String, delimiters: String = ","): List<String> =
         carNames.split(delimiters)
             .filter(String::isNotBlank)
             .map(String::removeBlank)
 
-    private fun createCarList(cars: List<String>): List<Car> =
+    private fun convertCar(cars: List<String>) =
         cars.map(::Name)
             .map(::Car)
 
     companion object {
-        fun default(): CarRacingGame {
-            return CarRacingGame(
-                ConsoleInput(),
-                ConsoleOutput(),
-                RandomMovePolicy(),
-                MaxScoreWinnerPolicy()
-            )
-        }
+        fun default() = CarRacingGame(
+            ConsoleInput(),
+            ConsoleOutput(),
+            RandomMovePolicy(),
+            MaxScoreWinnerPolicy()
+        )
     }
 }
 
