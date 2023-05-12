@@ -2,7 +2,7 @@ package io.github.gunkim.domain
 
 import io.github.gunkim.domain.Lotto.Companion.NUMBER_SIZE
 
-class LottoMachine(
+data class LottoMachine(
     private val factory: NumberFactory,
 ) {
     fun buy(money: Int): List<Lotto> {

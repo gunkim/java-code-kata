@@ -1,6 +1,6 @@
 package io.github.gunkim.domain
 
-class WinningLotto(
+data class WinningLotto(
     private val lotto: Lotto,
     private val bonusNumber: LottoNumber,
 ) {
