@@ -14,13 +14,11 @@ data class LottoMachine(
             .toList()
     }
 
-    private fun createLottoNumbers(): List<LottoNumber> {
-        return generateSequence { factory.create() }
-            .distinct()
-            .take(NUMBER_SIZE)
-            .map(::LottoNumber)
-            .toList()
-    }
+    private fun createLottoNumbers() = generateSequence { factory.create() }
+        .distinct()
+        .take(NUMBER_SIZE)
+        .map(::LottoNumber)
+        .toList()
 
     companion object {
         private const val PRICE = 1_000
