@@ -1,20 +1,17 @@
 package io.github.gunkim.domain
 
-import java.util.SortedMap
+import java.util.*
 
 data class Player(
     val problem: Word,
     val letters: SortedMap<Int, Letter> = sortedMapOf(),
 ) {
     fun hit(letter: Letter): Player {
-        val index = problem.letters.indexOf(letter)
-
+        val index = problem.indexOf(letter)
         if (index == -1) return this
 
-        val copy = letters.toSortedMap()
-            .also { it[index] = letter }
-
-        return Player(problem, copy)
+        val newLetters = letters.apply { this[index] = letter }
+        return Player(problem, newLetters)
     }
 
     fun isComplete() = letters.size == problem.length

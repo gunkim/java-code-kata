@@ -10,6 +10,8 @@ data class Word(val letters: List<Letter>) {
     val value: String
         get() = letters.joinToString(separator = "", transform = Letter::value)
 
+    fun indexOf(letter: Letter): Int = letters.indexOf(letter)
+
     companion object {
         fun of(word: String) = Word(word.split("").dropLast(1).drop(1).map(::Letter))
 
