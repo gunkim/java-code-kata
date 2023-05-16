@@ -6,7 +6,7 @@ import io.github.gunkim.rabbit.domain.Direction.RIGHT
 import io.github.gunkim.rabbit.domain.Position
 import io.github.gunkim.rabbit.domain.rabbit.policy.CreateDirectionPolicy
 import io.github.gunkim.rabbit.domain.rabbit.policy.CreatePositionPolicy
-import java.util.UUID
+import java.util.*
 
 data class Rabbit(
     val id: UUID = UUID.randomUUID(),
@@ -30,7 +30,12 @@ data class Rabbit(
     fun isSamePosition(position: Position) = this.position == position
 
     private fun isMove(position: Position, direction: Direction) = when (direction) {
-        LEFT -> this.position.value - position.value >= 0
-        RIGHT -> this.position.value + position.value <= 69
+        LEFT -> this.position.value - position.value >= MIN_POSITION
+        RIGHT -> this.position.value + position.value <= MAX_POSITION
+    }
+
+    companion object {
+        const val MIN_POSITION = 0
+        const val MAX_POSITION = 69
     }
 }
