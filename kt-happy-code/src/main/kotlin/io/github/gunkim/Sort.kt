@@ -18,3 +18,11 @@ fun evenNumberFirstSort(array: IntArray): IntArray {
     return array.filter(evenNumbersFilter).sorted().toIntArray() +
             array.filterNot(evenNumbersFilter).sorted().toIntArray()
 }
+
+enum class Color(val order: Int) {
+    RED(1), WHITE(2), BLUE(3)
+}
+
+fun dutchFlagPartition(colors: List<Color>): List<Color> {
+    return colors.sortedBy { it.order }
+}

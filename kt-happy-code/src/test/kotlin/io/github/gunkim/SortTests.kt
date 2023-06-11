@@ -24,4 +24,31 @@ class SortTests : StringSpec({
             evenNumberFirstSort(it) shouldBe intArrayOf(2, 4, 6, 8, 1, 3, 5, 7, 9)
         }
     }
+    "네덜란드 국기에 맞게 정렬한다" {
+        example.forEach {
+            dutchFlagPartition(
+                listOf(
+                    Color.WHITE,
+                    Color.RED,
+                    Color.RED,
+                    Color.WHITE,
+                    Color.WHITE,
+                    Color.BLUE,
+                    Color.BLUE,
+                    Color.RED,
+                    Color.BLUE
+                )
+            ) shouldBe listOf(
+                Color.RED,
+                Color.RED,
+                Color.RED,
+                Color.WHITE,
+                Color.WHITE,
+                Color.WHITE,
+                Color.BLUE,
+                Color.BLUE,
+                Color.BLUE
+            )
+        }
+    }
 })
