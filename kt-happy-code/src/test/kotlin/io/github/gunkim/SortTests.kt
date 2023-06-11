@@ -51,4 +51,13 @@ class SortTests : StringSpec({
             )
         }
     }
+    "십진수를 의미하는 배열을 전달하면 1을 증가한 배열을 반환한다" {
+        listOf(
+            listOf(1, 2, 9) to listOf(1, 3, 0),
+            listOf(2, 0, 4, 8) to listOf(2, 0, 4, 9),
+            listOf(5, 1, 2) to listOf(5, 1, 3)
+        ).forEach { (value, exceptedValue) ->
+            plusOne(value) shouldBe exceptedValue
+        }
+    }
 })

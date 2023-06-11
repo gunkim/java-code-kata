@@ -26,3 +26,11 @@ enum class Color(val order: Int) {
 fun dutchFlagPartition(colors: List<Color>): List<Color> {
     return colors.sortedBy { it.order }
 }
+
+fun plusOne(numbers: List<Int>): List<Int> {
+    val result = numbers.joinToString("") { it.toString() }.toInt() + 1
+
+    return result.toString()
+        .split("").drop(1).dropLast(1)
+        .map(String::toInt)
+}
