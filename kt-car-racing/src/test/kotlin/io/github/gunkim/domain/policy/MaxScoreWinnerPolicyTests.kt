@@ -1,11 +1,12 @@
 package io.github.gunkim.domain.policy
 
 import io.github.gunkim.domain.car.Car
+import io.github.gunkim.domain.car.Cars
 import io.github.gunkim.domain.car.vo.Name
 import io.github.gunkim.domain.car.vo.Position
 import io.kotest.core.annotation.DisplayName
 import io.kotest.core.spec.style.StringSpec
-import io.kotest.matchers.collections.shouldContainExactly
+import io.kotest.matchers.shouldBe
 
 private val sut = MaxScoreWinnerPolicy()
 
@@ -21,9 +22,11 @@ class MaxScoreWinnerPolicyTests : StringSpec({
 
         val winners = sut.winner(participants)
 
-        winners shouldContainExactly listOf(
-            Car(Name("망주"), Position(3)),
-            Car(Name("주니"), Position(3)),
+        winners shouldBe Cars(
+            listOf(
+                Car(Name("망주"), Position(3)),
+                Car(Name("주니"), Position(3)),
+            )
         )
     }
 })

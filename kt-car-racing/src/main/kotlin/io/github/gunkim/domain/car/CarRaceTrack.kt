@@ -5,14 +5,12 @@ import io.github.gunkim.domain.policy.MovePolicy
 import io.github.gunkim.domain.policy.WinnerPolicy
 
 data class CarRaceTrack(
-    private val cars: Cars,
+    val cars: Cars,
     private val movePolicy: MovePolicy,
     private val winnerPolicy: WinnerPolicy,
 ) {
-    val winners: List<Car>
+    val winners: Cars
         get() = winnerPolicy.winner(cars.list)
-    val carList: List<Car>
-        get() = cars.list
 
     fun round(lab: Lab): CarRaceTrack {
         var cars = cars
