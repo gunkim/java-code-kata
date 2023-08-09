@@ -6,4 +6,8 @@ data class Position(val value: Int = 0) {
     }
 
     operator fun plus(number: Int) = Position(value + number)
+
+    companion object {
+        val ZERO = Position(0)
+    }
 }
