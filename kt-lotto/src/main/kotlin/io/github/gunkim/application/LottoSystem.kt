@@ -2,15 +2,15 @@ package io.github.gunkim.application
 
 import io.github.gunkim.application.io.Input
 import io.github.gunkim.application.io.Output
+import io.github.gunkim.application.io.console.ConsoleInput
+import io.github.gunkim.application.io.console.ConsoleOutput
 import io.github.gunkim.domain.*
 
 class LottoSystem(
     private val input: Input,
     private val output: Output,
-    numberFactory: NumberFactory,
+    private val lottoMachine: LottoMachine
 ) {
-    private val lottoMachine = LottoMachine(numberFactory)
-
     fun run() {
         output.buyMoneyInputMessage()
         val money = input.money
@@ -32,5 +32,13 @@ class LottoSystem(
             .map { Rank.ranking(it.first, it.second) }
             .groupingBy { it }.eachCount()
         output.showStatistics(results)
+    }
+
+    companion object {
+        fun default(): LottoSystem = LottoSystem(
+            ConsoleInput(),
+            ConsoleOutput(),
+            LottoMachine(RandomNumberFactory())
+        )
     }
 }

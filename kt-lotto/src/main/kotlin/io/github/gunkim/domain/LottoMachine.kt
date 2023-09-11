@@ -14,7 +14,7 @@ data class LottoMachine(
             .toList()
     }
 
-    private fun createLottoNumbers() = generateSequence { factory.create() }
+    private fun createLottoNumbers() = generateSequence(factory::create)
         .distinct()
         .take(NUMBER_SIZE)
         .map(::LottoNumber)
