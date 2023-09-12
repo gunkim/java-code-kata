@@ -15,7 +15,7 @@ fun main() {
 
     var hangman = Hangman.LEVEL1
     var player = Player(problem)
-    while (!player.isComplete()) {
+    while (!player.isCorrect) {
         println(hangman.display)
 
         if (hangman.isDead()) {
