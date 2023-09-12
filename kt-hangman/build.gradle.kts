@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.7.21"
+    kotlin("jvm") version "1.8.10"
 }
 
 group = "io.github.gunkim"
@@ -15,12 +15,16 @@ dependencies {
     testImplementation("io.kotest:kotest-runner-junit5-jvm:4.6.3")
 }
 
-tasks.test {
-    useJUnitPlatform()
-}
-
-tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = "17"
+tasks {
+    withType<KotlinCompile> {
+        kotlinOptions.jvmTarget = "17"
+    }
+    test {
+        useJUnitPlatform()
+    }
+    processResources {
+        duplicatesStrategy = DuplicatesStrategy.INCLUDE
+    }
 }
 
 sourceSets {
