@@ -14,7 +14,7 @@ data class Lotto(val numbers: List<LottoNumber>) {
             numbers.replace(" ", "")
                 .split(",")
                 .map(String::toInt)
-                .map(::LottoNumber)
+                .map(::LottoNumber),
         )
 
         const val NUMBER_SIZE = 6

@@ -2,7 +2,7 @@ package io.github.gunkim.domain
 
 class Expression private constructor(
     private val numbers: ArrayDeque<Int>,
-    private val operators: ArrayDeque<Operator>
+    private val operators: ArrayDeque<Operator>,
 ) {
     constructor(numbers: Collection<Int>, operators: Collection<Operator>) :
         this(ArrayDeque(numbers), ArrayDeque(operators))

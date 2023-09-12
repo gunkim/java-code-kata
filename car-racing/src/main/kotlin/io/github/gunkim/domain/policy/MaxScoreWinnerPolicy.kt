@@ -8,7 +8,7 @@ class MaxScoreWinnerPolicy : WinnerPolicy {
         return Cars(
             cars.groupBy { it.forwardValue }
                 .maxBy { it.key }
-                .value
+                .value,
         )
     }
 }

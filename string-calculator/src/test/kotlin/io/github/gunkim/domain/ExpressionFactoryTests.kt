@@ -12,7 +12,7 @@ class ExpressionFactoryTests : StringSpec({
             "+ 1 + 2 + 3",
             "1 + 2 +",
             "1 2 + 1",
-            "1 + # + 2"
+            "1 + # + 2",
         ).forEach {
             shouldThrow<IllegalArgumentException> {
                 ExpressionFactory(it)
@@ -25,7 +25,7 @@ class ExpressionFactoryTests : StringSpec({
             "5 + 2 - 2 * 10 / 2" to 25,
             "5 - 2" to 3,
             "4 / 2" to 2,
-            "5 * 3" to 15
+            "5 * 3" to 15,
         ).forEach { (expressionKey, expectedValue) ->
             val factory = ExpressionFactory(expressionKey)
             val expression = factory.make()

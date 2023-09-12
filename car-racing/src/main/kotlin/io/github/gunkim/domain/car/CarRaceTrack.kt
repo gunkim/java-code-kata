@@ -7,7 +7,7 @@ import io.github.gunkim.domain.policy.WinnerPolicy
 data class CarRaceTrack(
     val cars: Cars,
     private val movePolicy: MovePolicy,
-    private val winnerPolicy: WinnerPolicy
+    private val winnerPolicy: WinnerPolicy,
 ) {
     val winners: Cars
         get() = winnerPolicy.winner(cars.list)

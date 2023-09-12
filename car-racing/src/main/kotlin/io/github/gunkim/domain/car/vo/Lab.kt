@@ -1,7 +1,7 @@
 package io.github.gunkim.domain.car.vo
 
 data class Lab(
-    val value: Int
+    val value: Int,
 ) {
     init {
         require(value > 0) {

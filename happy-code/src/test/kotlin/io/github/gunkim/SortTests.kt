@@ -9,7 +9,7 @@ private val example = listOf(
     intArrayOf(3, 1, 2, 9, 8, 4, 5, 7, 6),
     intArrayOf(4, 2, 8, 3, 1, 7, 6, 5, 9),
     intArrayOf(7, 6, 5, 9, 8, 3, 1, 4, 2),
-    intArrayOf(2, 1, 9, 4, 3, 7, 8, 5, 6)
+    intArrayOf(2, 1, 9, 4, 3, 7, 8, 5, 6),
 )
 
 @DisplayName("정렬 알고리즘 테스트")
@@ -36,8 +36,8 @@ class SortTests : StringSpec({
                     Color.BLUE,
                     Color.BLUE,
                     Color.RED,
-                    Color.BLUE
-                )
+                    Color.BLUE,
+                ),
             ) shouldBe listOf(
                 Color.RED,
                 Color.RED,
@@ -47,7 +47,7 @@ class SortTests : StringSpec({
                 Color.WHITE,
                 Color.BLUE,
                 Color.BLUE,
-                Color.BLUE
+                Color.BLUE,
             )
         }
     }
@@ -55,7 +55,7 @@ class SortTests : StringSpec({
         listOf(
             listOf(1, 2, 9) to listOf(1, 3, 0),
             listOf(2, 0, 4, 8) to listOf(2, 0, 4, 9),
-            listOf(5, 1, 2) to listOf(5, 1, 3)
+            listOf(5, 1, 2) to listOf(5, 1, 3),
         ).forEach { (value, exceptedValue) ->
             plusOne(value) shouldBe exceptedValue
         }

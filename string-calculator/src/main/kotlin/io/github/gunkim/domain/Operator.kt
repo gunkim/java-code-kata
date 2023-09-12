@@ -2,12 +2,13 @@ package io.github.gunkim.domain
 
 enum class Operator(
     private val operator: String,
-    private val func: (Int, Int) -> Int
+    private val func: (Int, Int) -> Int,
 ) {
     PLUS("+", { num1, num2 -> num1 + num2 }),
     MINUS("-", { num1, num2 -> num1 - num2 }),
     MULTPLY("*", { num1, num2 -> num1 * num2 }),
-    DIVIDE("/", { num1, num2 -> num1 / num2 });
+    DIVIDE("/", { num1, num2 -> num1 / num2 }),
+    ;
 
     fun execute(num1: Int, num2: Int) = func(num1, num2)
 

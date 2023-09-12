@@ -2,7 +2,7 @@ package io.github.gunkim.domain
 
 data class WinningLotto(
     private val lotto: Lotto,
-    private val bonusNumber: LottoNumber
+    private val bonusNumber: LottoNumber,
 ) {
     init {
         require(!lotto.contains(bonusNumber)) {

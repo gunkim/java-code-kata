@@ -16,7 +16,7 @@ data class Word(val letters: List<Letter>) {
         fun from(word: String) = Word(
             word.split("")
                 .filter(String::isNotBlank)
-                .map(::Letter)
+                .map(::Letter),
         )
 
         private const val MAX_LENGTH = 8

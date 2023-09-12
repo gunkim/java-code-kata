@@ -5,7 +5,7 @@ import java.util.*
 
 data class Human(
     val id: UUID = UUID.randomUUID(),
-    val position: Position = Position.random()
+    val position: Position = Position.random(),
 ) {
     val positionValue: Int
         get() = position.value
