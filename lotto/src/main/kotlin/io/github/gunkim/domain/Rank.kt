@@ -2,7 +2,7 @@ package io.github.gunkim.domain
 
 enum class Rank(
     val reward: Int,
-    val matchCnt: Int,
+    val matchCnt: Int
 ) {
     FIRST(2_000_000_000, 6),
     SECOND(30_000_000, 5),

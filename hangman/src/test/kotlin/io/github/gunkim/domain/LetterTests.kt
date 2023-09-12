@@ -20,7 +20,7 @@ class LetterTests : StringSpec({
         listOf(
             "K",
             "1",
-            "@",
+            "@"
         ).forEach {
             shouldThrow<IllegalArgumentException> { Letter(it) }
                 .message shouldBe "한글만 허용됩니다. (현재: $it)"

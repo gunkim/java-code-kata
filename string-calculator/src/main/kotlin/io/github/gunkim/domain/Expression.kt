@@ -2,10 +2,10 @@ package io.github.gunkim.domain
 
 class Expression private constructor(
     private val numbers: ArrayDeque<Int>,
-    private val operators: ArrayDeque<Operator>,
+    private val operators: ArrayDeque<Operator>
 ) {
     constructor(numbers: Collection<Int>, operators: Collection<Operator>) :
-            this(ArrayDeque(numbers), ArrayDeque(operators))
+        this(ArrayDeque(numbers), ArrayDeque(operators))
 
     init {
         require(operators.isNotEmpty()) { "연산자는 최소 1개 이상이어야 합니다." }

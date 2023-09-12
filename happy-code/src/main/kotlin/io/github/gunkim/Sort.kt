@@ -16,7 +16,7 @@ fun evenNumberFirstSort(array: IntArray): IntArray {
     val evenNumbersFilter: (Int) -> Boolean = { it % 2 == 0 }
 
     return array.filter(evenNumbersFilter).sorted().toIntArray() +
-            array.filterNot(evenNumbersFilter).sorted().toIntArray()
+        array.filterNot(evenNumbersFilter).sorted().toIntArray()
 }
 
 enum class Color(val order: Int) {

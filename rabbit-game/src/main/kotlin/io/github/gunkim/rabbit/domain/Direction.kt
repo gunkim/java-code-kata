@@ -1,7 +1,7 @@
 package io.github.gunkim.rabbit.domain
 
 enum class Direction(
-    val value: String,
+    val value: String
 ) {
     LEFT("L"),
     RIGHT("R");

@@ -26,6 +26,6 @@ class ConsoleOutput : Output {
     private fun showRank(rank: Rank, results: Map<Rank, Int>) {
         val resultCnt = results[rank] ?: return
         val (reward, matchCnt) = rank
-        println("${matchCnt}개 일치 (${reward})-${resultCnt}개")
+        println("${matchCnt}개 일치 ($reward)-${resultCnt}개")
     }
 }

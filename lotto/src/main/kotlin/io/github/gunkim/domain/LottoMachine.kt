@@ -3,7 +3,7 @@ package io.github.gunkim.domain
 import io.github.gunkim.domain.Lotto.Companion.NUMBER_SIZE
 
 data class LottoMachine(
-    private val factory: NumberFactory,
+    private val factory: NumberFactory
 ) {
     fun buy(money: Int): List<Lotto> {
         require(money >= PRICE) { "한장도 살 수 없는 금액입니다." }

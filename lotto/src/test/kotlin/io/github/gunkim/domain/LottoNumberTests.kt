@@ -11,7 +11,7 @@ class LottoNumberTests : StringSpec({
         listOf(0, 46).forEach {
             shouldThrow<IllegalArgumentException> {
                 LottoNumber(it)
-            }.apply { message shouldBe "'${it}'는 로또번호 범위 1 ~ 45 사이를 벗어납니다." }
+            }.apply { message shouldBe "'$it'는 로또번호 범위 1 ~ 45 사이를 벗어납니다." }
         }
     }
 })

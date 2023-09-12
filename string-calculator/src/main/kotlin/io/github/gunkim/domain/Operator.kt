@@ -2,7 +2,7 @@ package io.github.gunkim.domain
 
 enum class Operator(
     private val operator: String,
-    private val func: (Int, Int) -> Int,
+    private val func: (Int, Int) -> Int
 ) {
     PLUS("+", { num1, num2 -> num1 + num2 }),
     MINUS("-", { num1, num2 -> num1 - num2 }),

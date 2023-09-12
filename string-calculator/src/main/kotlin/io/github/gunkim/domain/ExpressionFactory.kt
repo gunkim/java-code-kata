@@ -1,7 +1,7 @@
 package io.github.gunkim.domain
 
 class ExpressionFactory(
-    private val expression: String,
+    private val expression: String
 ) {
     init {
         require(EXPRESSION_PATTERN.matches(expression)) { "유효하지 않은 계산식입니다." }

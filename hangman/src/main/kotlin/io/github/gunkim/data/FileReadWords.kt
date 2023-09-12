@@ -4,7 +4,7 @@ import io.github.gunkim.domain.Word
 import io.github.gunkim.domain.Words
 
 class FileReadWords(
-    private val fileName: String,
+    private val fileName: String
 ) : Words {
     override fun findRandom(): Word {
         val words = bufferedReader()

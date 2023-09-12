@@ -1,7 +1,7 @@
 package io.github.gunkim.application
 
 enum class Hangman(
-    val display: String,
+    val display: String
 ) {
     LEVEL1(
         """
@@ -12,7 +12,7 @@ enum class Hangman(
         |      |
         |      |
         |=========
-        """.trimMargin(),
+        """.trimMargin()
     ),
     LEVEL2(
         """
@@ -23,7 +23,7 @@ enum class Hangman(
         |      |
         |      |
         |=========
-        """.trimMargin(),
+        """.trimMargin()
     ),
     LEVEL3(
         """
@@ -34,7 +34,7 @@ enum class Hangman(
         |      |
         |      |
         |=========
-        """.trimMargin(),
+        """.trimMargin()
     ),
     LEVEL4(
         """
@@ -45,7 +45,7 @@ enum class Hangman(
         |      |
         |      |
         |=========
-        """.trimMargin(),
+        """.trimMargin()
     ),
     LEVEL5(
         """
@@ -56,7 +56,7 @@ enum class Hangman(
         |      |
         |      |
         |=========
-        """.trimMargin(),
+        """.trimMargin()
     ),
     LEVEL6(
         """
@@ -67,7 +67,7 @@ enum class Hangman(
         | /    |
         |      |
         |=========
-        """.trimMargin(),
+        """.trimMargin()
     ),
     LEVEL7(
         """
@@ -78,7 +78,7 @@ enum class Hangman(
         | / \  |
         |      |
         |=========
-        """.trimMargin(),
+        """.trimMargin()
     );
 
     fun next() = when (this) {
