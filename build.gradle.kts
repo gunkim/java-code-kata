@@ -1,13 +1,18 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jlleitschuh.gradle.ktlint.KtlintExtension
+
+val jvmVersion: String by project
+val groupName: String by project
+val projectVersion: String by project
 
 plugins {
-    kotlin("jvm") version "1.9.0"
-    id("org.jlleitschuh.gradle.ktlint") version "11.5.1"
+    kotlin("jvm")
+    id("org.jlleitschuh.gradle.ktlint")
 }
 
 allprojects {
-    group = "io.github.gunkim"
-    version = "2023.09.12"
+    group = groupName
+    version = projectVersion
 
     repositories {
         mavenCentral()
@@ -20,13 +25,13 @@ subprojects {
 
     tasks {
         withType<KotlinCompile> {
-            kotlinOptions.jvmTarget = "17"
+            kotlinOptions.jvmTarget = jvmVersion
         }
         test {
             useJUnitPlatform()
         }
     }
-    configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
+    configure<KtlintExtension> {
         debug.set(true)
     }
     dependencies {

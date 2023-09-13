@@ -3,10 +3,12 @@ pluginManagement {
         mavenCentral()
         gradlePluginPortal()
     }
-}
-
-plugins {
-    id("org.gradle.toolchains.foojay-resolver-convention") version "0.5.0"
+    plugins {
+        val kotlinVersion: String by settings
+        val ktlintVersion: String by settings
+        kotlin("jvm") version kotlinVersion
+        id("org.jlleitschuh.gradle.ktlint") version ktlintVersion
+    }
 }
 
 include("lotto")
