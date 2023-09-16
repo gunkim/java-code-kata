@@ -13,7 +13,7 @@ class RankTests : StringSpec({
             Triple(4, false, Rank.FOURTH),
             Triple(5, false, Rank.THIRD),
             Triple(5, true, Rank.SECOND),
-            Triple(6, false, Rank.FIRST),
+            Triple(6, false, Rank.FIRST)
         ).forEach { (hitCnt, isBonusHit, expectedRank) ->
             val rank = Rank.ranking(hitCnt, isBonusHit)
 

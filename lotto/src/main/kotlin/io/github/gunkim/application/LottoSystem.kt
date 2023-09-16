@@ -14,7 +14,7 @@ import io.github.gunkim.domain.WinningLotto
 class LottoSystem(
     private val input: Input,
     private val output: Output,
-    private val lottoMachine: LottoMachine,
+    private val lottoMachine: LottoMachine
 ) {
     fun run() {
         output.buyMoneyInputMessage()
@@ -43,7 +43,7 @@ class LottoSystem(
         fun default(): LottoSystem = LottoSystem(
             ConsoleInput(),
             ConsoleOutput(),
-            LottoMachine(RandomNumberFactory()),
+            LottoMachine(RandomNumberFactory())
         )
     }
 }

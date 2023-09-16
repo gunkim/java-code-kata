@@ -14,8 +14,8 @@ class CarsTests : StringSpec({
             listOf(
                 Car(Name("gunny")),
                 Car(Name("앵미")),
-                Car(Name("망주")),
-            ),
+                Car(Name("망주"))
+            )
         )
 
         val runCars = sut.run { go { true } }
@@ -24,8 +24,8 @@ class CarsTests : StringSpec({
             listOf(
                 Car(Name("gunny"), Position(1)),
                 Car(Name("앵미"), Position(1)),
-                Car(Name("망주"), Position(1)),
-            ),
+                Car(Name("망주"), Position(1))
+            )
         )
     }
     "자동차가 1대 미만일 경우 예외가 발생한다" {

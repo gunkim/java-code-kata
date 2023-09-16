@@ -1,7 +1,7 @@
 package io.github.gunkim.rabbit.domain
 
 data class Position(
-    val value: Int,
+    val value: Int
 ) {
     init {
         require(value in 0..69) { "0 ~ 69 사이의 위치만 허용됩니다." }

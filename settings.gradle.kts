@@ -20,4 +20,3 @@ include("string-calculator")
 include("tetris")
 
 rootProject.name = "code-kata"
-

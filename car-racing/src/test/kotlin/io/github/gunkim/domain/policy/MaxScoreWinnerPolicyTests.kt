@@ -17,7 +17,7 @@ class MaxScoreWinnerPolicyTests : StringSpec({
             Car(Name("거니"), Position(1)),
             Car(Name("앵미"), Position(2)),
             Car(Name("망주"), Position(3)),
-            Car(Name("주니"), Position(3)),
+            Car(Name("주니"), Position(3))
         )
 
         val winners = sut.winner(participants)
@@ -25,8 +25,8 @@ class MaxScoreWinnerPolicyTests : StringSpec({
         winners shouldBe Cars(
             listOf(
                 Car(Name("망주"), Position(3)),
-                Car(Name("주니"), Position(3)),
-            ),
+                Car(Name("주니"), Position(3))
+            )
         )
     }
 })

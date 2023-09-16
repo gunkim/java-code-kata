@@ -10,14 +10,14 @@ import java.util.*
 
 data class Rabbit(
     val id: UUID = UUID.randomUUID(),
-    val position: Position = Position.random(),
+    val position: Position = Position.random()
 ) {
     val positionValue: Int
         get() = position.value
 
     fun move(
         createPositionPolicy: CreatePositionPolicy,
-        createDirectionPolicy: CreateDirectionPolicy,
+        createDirectionPolicy: CreateDirectionPolicy
     ): Rabbit {
         val position = createPositionPolicy.position()
 

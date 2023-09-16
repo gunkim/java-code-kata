@@ -5,5 +5,5 @@ import io.github.gunkim.application.io.console.ConsoleOutput
 
 fun main() = Calculator(
     ConsoleInput(),
-    ConsoleOutput(),
+    ConsoleOutput()
 ).run()

@@ -15,7 +15,7 @@ class CarRacingGame(
     private val input: Input,
     private val output: Output,
     private val movePolicy: MovePolicy,
-    private val winnerPolicy: WinnerPolicy,
+    private val winnerPolicy: WinnerPolicy
 ) {
     fun run() {
         output.carnameInputMessage()
@@ -33,7 +33,7 @@ class CarRacingGame(
             ConsoleInput(),
             ConsoleOutput(),
             RandomMovePolicy(),
-            MaxScoreWinnerPolicy(),
+            MaxScoreWinnerPolicy()
         )
     }
 }

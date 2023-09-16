@@ -10,7 +10,7 @@ class WordTests : StringSpec({
     "생성된다." {
         val value = listOf(
             Letter("한"),
-            Letter("글"),
+            Letter("글")
         )
 
         val word = Word(value)
@@ -30,7 +30,7 @@ class WordTests : StringSpec({
             Letter("만"),
             Letter("불"),
             Letter("만"),
-            Letter("있"),
+            Letter("있")
         )
         shouldThrow<IllegalArgumentException> { Word(value) }
             .message shouldBe "단어는 8자를 넘을 수 없습니다. (현재: $value)"
@@ -38,7 +38,7 @@ class WordTests : StringSpec({
     "내용을 문자열로 반환한다." {
         val value = listOf(
             Letter("한"),
-            Letter("글"),
+            Letter("글")
         )
         val word = Word(value)
         word.value shouldBe "한글"
@@ -46,7 +46,7 @@ class WordTests : StringSpec({
     "길이를 반환한다." {
         val value = listOf(
             Letter("한"),
-            Letter("글"),
+            Letter("글")
         )
         val word = Word(value)
         word.length shouldBe 2

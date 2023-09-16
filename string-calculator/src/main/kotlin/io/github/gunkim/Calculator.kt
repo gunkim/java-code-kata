@@ -6,7 +6,7 @@ import io.github.gunkim.domain.ExpressionFactory
 
 class Calculator(
     private val input: Input,
-    private val output: Output,
+    private val output: Output
 ) {
     fun run() {
         output.inputMessage()

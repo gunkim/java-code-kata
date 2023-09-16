@@ -5,7 +5,7 @@ import io.github.gunkim.domain.car.vo.Position
 
 data class Car(
     val name: Name,
-    val position: Position = Position.ZERO,
+    val position: Position = Position.ZERO
 ) {
     val forwardValue: Int = position.value
     val nameValue: String = name.value
