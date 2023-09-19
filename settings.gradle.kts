@@ -12,7 +12,6 @@ pluginManagement {
 }
 
 include("lotto")
-include("happy-code")
 include("rabbit-game")
 include("hangman")
 include("car-racing")
