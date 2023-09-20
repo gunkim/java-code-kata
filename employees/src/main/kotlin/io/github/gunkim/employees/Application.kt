@@ -1,10 +1,11 @@
-package io.github.gunkim.excel
+package io.github.gunkim.employees
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
+import org.springframework.boot.runApplication
 
 @SpringBootApplication
 class Application
 
 fun main(args: Array<String>) {
-    org.springframework.boot.runApplication<Application>(*args)
+    runApplication<Application>(*args)
 }

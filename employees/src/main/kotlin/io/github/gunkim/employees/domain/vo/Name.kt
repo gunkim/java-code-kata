@@ -1,4 +1,4 @@
-package io.github.gunkim.excel.domain
+package io.github.gunkim.employees.domain.vo
 
 import jakarta.persistence.Column
 import jakarta.persistence.Embeddable
