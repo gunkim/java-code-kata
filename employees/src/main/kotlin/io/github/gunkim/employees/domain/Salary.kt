@@ -1,6 +1,8 @@
 package io.github.gunkim.employees.domain
 
-import jakarta.persistence.*
+import jakarta.persistence.Embeddable
+import jakarta.persistence.EmbeddedId
+import jakarta.persistence.Entity
 import java.io.Serializable
 import java.sql.Timestamp
 
