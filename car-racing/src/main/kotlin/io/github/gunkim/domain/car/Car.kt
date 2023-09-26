@@ -10,5 +10,9 @@ data class Car(
     val forwardValue: Int = position.value
     val nameValue: String = name.value
 
-    fun go() = Car(name, position + 1)
+    fun go() = Car(name, position + INCREASE_VALUE)
+
+    companion object {
+        const val INCREASE_VALUE = 1
+    }
 }
