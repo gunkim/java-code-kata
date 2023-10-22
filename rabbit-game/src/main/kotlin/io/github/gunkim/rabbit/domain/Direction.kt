@@ -8,8 +8,8 @@ enum class Direction(
     ;
 
     companion object {
-        fun random() = values().random()
+        fun random() = entries.toTypedArray().random()
 
-        fun ofValue(value: String) = values().first { it.value == value }
+        fun ofValue(value: String) = entries.first { it.value == value }
     }
 }
