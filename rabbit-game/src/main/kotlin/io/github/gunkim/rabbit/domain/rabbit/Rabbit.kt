@@ -22,20 +22,32 @@ data class Rabbit(
         val position = createPositionPolicy.position()
 
         return when (val direction = createDirectionPolicy.direction()) {
-            LEFT -> isMove(position, direction).takeIf { it }?.let { Rabbit(id, this.position - position) } ?: this
-            RIGHT -> isMove(position, direction).takeIf { it }?.let { Rabbit(id, this.position + position) } ?: this
+            LEFT -> {
+                if (!isMove(position, direction)) {
+                    return this
+                }
+                Rabbit(id, this.position - position)
+            }
+
+            RIGHT -> {
+                if (!isMove(position, direction)) {
+                    return this
+                }
+                Rabbit(id, this.position + position)
+            }
         }
     }
 
     fun isSamePosition(position: Position) = this.position == position
 
+
     private fun isMove(position: Position, direction: Direction) = when (direction) {
-        LEFT -> this.position.value - position.value >= MIN_POSITION
-        RIGHT -> this.position.value + position.value <= MAX_POSITION
+        LEFT -> this.position.minus(position).value >= MIN_POSITION
+        RIGHT -> this.position.plus(position).value <= MAX_POSITION
     }
 
     companion object {
-        const val MIN_POSITION = 0
-        const val MAX_POSITION = 69
+        private const val MIN_POSITION = 0
+        private const val MAX_POSITION = 69
     }
 }
