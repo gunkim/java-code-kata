@@ -2,7 +2,7 @@ package io.github.gunkim.domain
 
 import java.util.random.RandomGenerator
 
-class RandomNumberFactory : NumberFactory {
+class CreateRandomNumberPolicy : CreateNumberPolicy {
     override fun create(): Int = randomGenerator.nextInt(45) + 1
 
     companion object {

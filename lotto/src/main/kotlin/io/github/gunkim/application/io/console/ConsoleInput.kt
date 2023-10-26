@@ -6,7 +6,8 @@ class ConsoleInput : Input {
     override val money
         get() = readln().toInt()
     override val winningNumbers
-        get() = readlnOrNull() ?: throw IllegalArgumentException("당첨 번호는 입력되어야 합니다.")
+        get() = readlnOrNull()
+            ?: throw IllegalArgumentException("당첨 번호는 입력되어야 합니다.")
     override val bonusNumber
         get() = readln().toInt()
 }

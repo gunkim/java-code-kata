@@ -10,7 +10,6 @@ data class WinningLotto(
         }
     }
 
-    fun matches(lotto: Lotto): Pair<Int, Boolean> {
-        return lotto.match(this.lotto) to lotto.contains(bonusNumber)
-    }
+    fun matches(lotto: Lotto): Pair<Int, Boolean> =
+        lotto.match(this.lotto) to lotto.contains(bonusNumber)
 }

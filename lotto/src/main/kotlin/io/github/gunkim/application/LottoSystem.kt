@@ -7,7 +7,7 @@ import io.github.gunkim.application.io.console.ConsoleOutput
 import io.github.gunkim.domain.Lotto
 import io.github.gunkim.domain.LottoMachine
 import io.github.gunkim.domain.LottoNumber
-import io.github.gunkim.domain.RandomNumberFactory
+import io.github.gunkim.domain.CreateRandomNumberPolicy
 import io.github.gunkim.domain.Rank
 import io.github.gunkim.domain.WinningLotto
 
@@ -43,7 +43,7 @@ class LottoSystem(
         fun default(): LottoSystem = LottoSystem(
             ConsoleInput(),
             ConsoleOutput(),
-            LottoMachine(RandomNumberFactory())
+            LottoMachine(CreateRandomNumberPolicy())
         )
     }
 }

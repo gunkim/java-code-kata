@@ -20,7 +20,7 @@ class ConsoleOutput : Output {
     override fun showStatistics(results: Map<Rank, Int>) {
         println("당첨 통계")
         println("---------")
-        Rank.values().reversed().forEach { showRank(it, results) }
+        Rank.entries.reversed().forEach { showRank(it, results) }
     }
 
     private fun showRank(rank: Rank, results: Map<Rank, Int>) {

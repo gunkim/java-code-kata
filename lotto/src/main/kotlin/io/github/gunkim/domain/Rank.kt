@@ -18,10 +18,10 @@ enum class Rank(
 
     companion object {
         fun ranking(hitCnt: Int, isBonusHit: Boolean): Rank = when (hitCnt) {
-            6 -> FIRST
-            5 -> if (isBonusHit) SECOND else THIRD
-            4 -> FOURTH
-            3 -> FIFTH
+            FIRST.matchCnt -> FIRST
+            SECOND.matchCnt -> if (isBonusHit) SECOND else THIRD
+            FOURTH.matchCnt -> FOURTH
+            FIFTH.matchCnt -> FIFTH
             else -> MISS
         }
     }

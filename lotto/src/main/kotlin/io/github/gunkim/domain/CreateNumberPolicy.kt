@@ -1,5 +1,5 @@
 package io.github.gunkim.domain
 
-fun interface NumberFactory {
+fun interface CreateNumberPolicy {
     fun create(): Int
 }
