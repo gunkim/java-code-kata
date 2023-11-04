@@ -18,5 +18,6 @@ include("car-racing")
 include("string-calculator")
 include("tetris")
 include("employees")
+include("bank-statement-analyzer")
 
 rootProject.name = "code-kata"
