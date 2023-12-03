@@ -1,4 +1,4 @@
-# 코드 카타 저장소
+# This is Code Kata
 
 ![Java_21](https://img.shields.io/badge/java-21-red?logo=openjdk&logoColor=white)
 ![Kotlin](https://img.shields.io/badge/Kotlin-1.9.20-purple?logo=kotlin)
