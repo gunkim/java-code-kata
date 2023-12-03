@@ -20,3 +20,4 @@ include("tetris")
 include("employees")
 
 rootProject.name = "code-kata"
+include("data-systems")
