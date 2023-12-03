@@ -16,7 +16,6 @@ include("rabbit-game")
 include("hangman")
 include("car-racing")
 include("string-calculator")
-include("tetris")
 include("employees")
 
 rootProject.name = "code-kata"
