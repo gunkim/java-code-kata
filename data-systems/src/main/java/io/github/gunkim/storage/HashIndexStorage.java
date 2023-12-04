@@ -2,6 +2,8 @@ package io.github.gunkim.storage;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import io.github.gunkim.storage.exception.StorageReadException;
+import io.github.gunkim.storage.exception.StorageWriteException;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -24,7 +26,9 @@ import java.util.Optional;
  */
 public class HashIndexStorage extends Storage {
     private static final String SAVE_FILE_NAME = "database";
-    private static final String SAVE_ROW_FORMAT = "%s,%s\n";
+    private static final char END_CHAR = '\n';
+    private static final String KEY_VALUE_SEPARATOR = ",";
+    private static final String SAVE_ROW_FORMAT = "%s,%s" + END_CHAR;
     private static final Gson gson = new Gson();
 
     private final Map<String, Long> map = new HashMap<>();
@@ -46,34 +50,40 @@ public class HashIndexStorage extends Storage {
             writer.flush();
             map.put(key, startPosition);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new StorageWriteException(e.getMessage());
         }
     }
 
     @Override
     public Optional<Map<String, Object>> find(String key) {
         long offset = map.get(key);
-        try (RandomAccessFile file = new RandomAccessFile(persistPath(), "r")) {
+        try (var file = new RandomAccessFile(persistPath(), "r")) {
             file.seek(offset);
 
-            StringBuilder data = new StringBuilder();
+            var data = new StringBuilder();
             int b;
             while ((b = file.read()) != -1) {
                 char c = (char) b;
                 data.append(c);
 
-                if (c == '\n') {
+                if (c == END_CHAR) {
                     break;
                 }
             }
-            var json = data.substring(data.indexOf(",") + 1);
-            var type = new TypeToken<HashMap<String, Object>>() {
-            }.getType();
-            return Optional.ofNullable(gson.fromJson(json, type));
+            var json = extractValueFrom(data.toString());
+            return Optional.ofNullable(convertMapTo(json));
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new StorageReadException(e.getMessage());
         }
-        return Optional.empty();
+    }
+
+    private Map<String, Object> convertMapTo(String json) {
+        return gson.fromJson(json, new TypeToken<HashMap<String, Object>>() {
+        }.getType());
+    }
+
+    private String extractValueFrom(String pair) {
+        return pair.substring(pair.indexOf(KEY_VALUE_SEPARATOR) + 1);
     }
 
     private String persistPath() {
