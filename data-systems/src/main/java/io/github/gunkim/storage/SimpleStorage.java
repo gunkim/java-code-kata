@@ -2,6 +2,8 @@ package io.github.gunkim.storage;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import io.github.gunkim.storage.exception.StorageReadException;
+import io.github.gunkim.storage.exception.StorageWriteException;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -35,7 +37,7 @@ public class SimpleStorage extends Storage {
             writer.append(content);
             writer.flush();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new StorageWriteException(e.getMessage());
         }
     }
 
@@ -45,11 +47,15 @@ public class SimpleStorage extends Storage {
                     .filter(line -> line.startsWith("%s,".formatted(key)))
                     .reduce((previous, current) -> current)
                     .map(line -> line.substring(line.indexOf(',') + 1))
-                    .map(json -> gson.fromJson(json, new TypeToken<Map<String, Object>>() {
-                    }.getType()));
+                    .map(this::convertMapTo);
         } catch (IOException e) {
-            throw new RuntimeException("Error reading file", e);
+            throw new StorageReadException(e.getMessage());
         }
+    }
+
+    private Map<String, Object> convertMapTo(String json) {
+        return gson.fromJson(json, new TypeToken<Map<String, Object>>() {
+        }.getType());
     }
 
     private String persistPath() {
