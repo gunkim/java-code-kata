@@ -24,7 +24,7 @@ import java.util.Optional;
  * 인메모리에 모든 키가 저장된다는 조건을 전제로 고성능 읽기, 쓰기를 보장할 수 있다.
  * 하지만 메모리는 휘발성이기 때문에 재시작 시 재색인에 대한 부분은 고려되지 않았다.
  */
-public class HashIndexStorage extends Storage {
+public class HashIndexStorage<T> extends Storage<T> {
     private static final String SAVE_FILE_NAME = "database";
     private static final char END_CHAR = '\n';
     private static final String KEY_VALUE_SEPARATOR = ",";
@@ -38,7 +38,7 @@ public class HashIndexStorage extends Storage {
     }
 
     @Override
-    public void save(String key, Map<String, Object> value) {
+    public void save(String key, T value) {
         File file = new File(persistPath());
 
         long startPosition = file.length();
@@ -55,7 +55,7 @@ public class HashIndexStorage extends Storage {
     }
 
     @Override
-    public Optional<Map<String, Object>> find(String key) {
+    public Optional<T> find(String key) {
         long offset = map.get(key);
         try (var file = new RandomAccessFile(persistPath(), "r")) {
             file.seek(offset);
@@ -77,8 +77,8 @@ public class HashIndexStorage extends Storage {
         }
     }
 
-    private Map<String, Object> convertMapTo(String json) {
-        return gson.fromJson(json, new TypeToken<HashMap<String, Object>>() {
+    private T convertMapTo(String json) {
+        return gson.fromJson(json, new TypeToken<T>() {
         }.getType());
     }
 

@@ -9,7 +9,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -19,7 +18,7 @@ import java.util.stream.Stream;
  * 그러나, 읽기 작업은 전체 파일을 순차적으로 스캔하기 때문에 레코드가 많을 경우 성능이 저하될 수 있음. (컴팩션을 통해 레코드 수를 줄이는 방법을 고려해볼 수 있음)
  * 탐색 비용은 최소 O(N) 이며, 각 키에 대해 별도의 탐색이 필요할 경우 총 탐색 비용은 O(kN)이 될 수 있음 (k는 탐색 횟수).
  */
-public class SimpleStorage extends Storage {
+public class SimpleStorage<T> extends Storage<T> {
     private static final String SAVE_FILE_NAME = "database";
     private static final String SAVE_ROW_FORMAT = "%s,%s\n";
     private static final Gson gson = new Gson();
@@ -29,7 +28,7 @@ public class SimpleStorage extends Storage {
     }
 
     @Override
-    public void save(String key, Map<String, Object> value) {
+    public void save(String key, T value) {
         try (var writer = new FileWriter(persistPath(), true)) {
             var jsonValue = gson.toJson(value);
             var content = SAVE_ROW_FORMAT.formatted(key, jsonValue);
@@ -41,7 +40,7 @@ public class SimpleStorage extends Storage {
         }
     }
 
-    public Optional<Map<String, Object>> find(String key) {
+    public Optional<T> find(String key) {
         try (Stream<String> lines = Files.lines(Paths.get(persistPath()))) {
             return lines
                     .filter(line -> line.startsWith("%s,".formatted(key)))
@@ -53,8 +52,8 @@ public class SimpleStorage extends Storage {
         }
     }
 
-    private Map<String, Object> convertMapTo(String json) {
-        return gson.fromJson(json, new TypeToken<Map<String, Object>>() {
+    private T convertMapTo(String json) {
+        return gson.fromJson(json, new TypeToken<T>() {
         }.getType());
     }
 
