@@ -24,7 +24,7 @@ import java.util.Optional;
  * 인메모리에 모든 키가 저장된다는 조건을 전제로 고성능 읽기, 쓰기를 보장할 수 있다.
  * 하지만 메모리는 휘발성이기 때문에 재시작 시 재색인에 대한 부분은 고려되지 않았다.
  */
-public class HashIndexStorage<T> extends Storage<T> {
+public class HashIndexStorage<T> implements Storage<T> {
     private static final String SAVE_FILE_NAME = "database";
     private static final char END_CHAR = '\n';
     private static final String KEY_VALUE_SEPARATOR = ",";
@@ -32,14 +32,15 @@ public class HashIndexStorage<T> extends Storage<T> {
     private static final Gson gson = new Gson();
 
     private final Map<String, Long> map = new HashMap<>();
+    private final String persistPath;
 
-    public HashIndexStorage(String path) {
-        super(path);
+    HashIndexStorage(String path) {
+        persistPath = "%s/%s".formatted(path, SAVE_FILE_NAME);
     }
 
     @Override
     public void save(String key, T value) {
-        File file = new File(persistPath());
+        File file = new File(persistPath);
 
         long startPosition = file.length();
         try (var writer = new FileWriter(file, true)) {
@@ -57,7 +58,7 @@ public class HashIndexStorage<T> extends Storage<T> {
     @Override
     public Optional<T> find(String key) {
         long offset = map.get(key);
-        try (var file = new RandomAccessFile(persistPath(), "r")) {
+        try (var file = new RandomAccessFile(persistPath, "r")) {
             file.seek(offset);
 
             var data = new StringBuilder();
@@ -84,9 +85,5 @@ public class HashIndexStorage<T> extends Storage<T> {
 
     private String extractValueFrom(String pair) {
         return pair.substring(pair.indexOf(KEY_VALUE_SEPARATOR) + 1);
-    }
-
-    private String persistPath() {
-        return "%s/%s".formatted(storagePath(), SAVE_FILE_NAME);
     }
 }
