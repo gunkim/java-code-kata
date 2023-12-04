@@ -31,6 +31,7 @@ public class HashIndexStorage<T> implements Storage<T> {
     private static final char END_CHAR = '\n';
     private static final String KEY_VALUE_SEPARATOR = ",";
     private static final String SAVE_ROW_FORMAT = "%s,%s" + END_CHAR;
+    private static final int BACKUP_INTERVAL_MINUTES = 2;
     private static final Gson gson = new Gson();
 
     private final BackupManager<Map<String, Long>> backupManager = new BackupManager<>("./backup.ser");
@@ -98,7 +99,7 @@ public class HashIndexStorage<T> implements Storage<T> {
     private void scheduleBackup() {
         scheduler.scheduleAtFixedRate(() -> {
             backupManager.backup(cache);
-        }, 1, 1, TimeUnit.SECONDS);
+        }, BACKUP_INTERVAL_MINUTES, 1, TimeUnit.MINUTES);
     }
 
     private void load() {
