@@ -1,9 +1,9 @@
 package io.github.gunkim.storage;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import io.github.gunkim.storage.exception.StorageReadException;
 import io.github.gunkim.storage.exception.StorageWriteException;
+import io.github.gunkim.storage.serializer.JsonSerializer;
+import io.github.gunkim.storage.serializer.Serializer;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -21,7 +21,7 @@ import java.util.stream.Stream;
 public class SimpleStorage<T> implements Storage<T> {
     private static final String SAVE_FILE_NAME = "database";
     private static final String SAVE_ROW_FORMAT = "%s,%s\n";
-    private static final Gson gson = new Gson();
+    private static final Serializer jsonSerializer = new JsonSerializer();
 
     private final String persistPath;
 
@@ -32,7 +32,7 @@ public class SimpleStorage<T> implements Storage<T> {
     @Override
     public void save(String key, T value) {
         try (var writer = new FileWriter(persistPath, true)) {
-            var jsonValue = gson.toJson(value);
+            var jsonValue = jsonSerializer.serialize(value);
             var content = SAVE_ROW_FORMAT.formatted(key, jsonValue);
 
             writer.append(content);
@@ -48,14 +48,9 @@ public class SimpleStorage<T> implements Storage<T> {
                     .filter(line -> line.startsWith("%s,".formatted(key)))
                     .reduce((previous, current) -> current)
                     .map(line -> line.substring(line.indexOf(',') + 1))
-                    .map(this::convertMapTo);
+                    .map(jsonSerializer::deserialize);
         } catch (IOException e) {
             throw new StorageReadException(e.getMessage());
         }
-    }
-
-    private T convertMapTo(String json) {
-        return gson.fromJson(json, new TypeToken<T>() {
-        }.getType());
     }
 }

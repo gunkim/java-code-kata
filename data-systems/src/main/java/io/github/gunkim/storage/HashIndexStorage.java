@@ -1,9 +1,9 @@
 package io.github.gunkim.storage;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import io.github.gunkim.storage.exception.StorageReadException;
 import io.github.gunkim.storage.exception.StorageWriteException;
+import io.github.gunkim.storage.serializer.JsonSerializer;
+import io.github.gunkim.storage.serializer.Serializer;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -32,7 +32,7 @@ public class HashIndexStorage<T> implements Storage<T> {
     private static final String KEY_VALUE_SEPARATOR = ",";
     private static final String SAVE_ROW_FORMAT = "%s,%s" + END_CHAR;
     private static final int BACKUP_INTERVAL_MINUTES = 2;
-    private static final Gson gson = new Gson();
+    private static final Serializer jsonSerializer = new JsonSerializer();
 
     private final BackupManager<Map<String, Long>> backupManager = new BackupManager<>("./backup.ser");
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
@@ -53,7 +53,7 @@ public class HashIndexStorage<T> implements Storage<T> {
 
         long startPosition = file.length();
         try (var writer = new FileWriter(file, true)) {
-            var jsonValue = gson.toJson(value);
+            var jsonValue = jsonSerializer.serialize(value);
             var content = SAVE_ROW_FORMAT.formatted(key, jsonValue);
 
             writer.append(content);
@@ -81,15 +81,10 @@ public class HashIndexStorage<T> implements Storage<T> {
                 }
             }
             var json = extractValueFrom(data.toString());
-            return Optional.ofNullable(convertMapTo(json));
+            return Optional.ofNullable(jsonSerializer.deserialize(json));
         } catch (IOException e) {
             throw new StorageReadException(e.getMessage());
         }
-    }
-
-    private T convertMapTo(String json) {
-        return gson.fromJson(json, new TypeToken<T>() {
-        }.getType());
     }
 
     private String extractValueFrom(String pair) {
