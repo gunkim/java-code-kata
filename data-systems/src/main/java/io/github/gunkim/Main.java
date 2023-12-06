@@ -19,20 +19,9 @@ public class Main {
                 "attractions", List.of("Big Ben", "London Eye3")
         ));
 
-        stopwatch(() -> {
+        StopWatch.run(() -> {
             var data = storage.find("123456");
             data.ifPresent(System.out::println);
         });
-    }
-
-    private static void stopwatch(Runnable runnable) {
-        long startTime = System.nanoTime();
-        runnable.run();
-        long endTime = System.nanoTime();
-
-        long duration = (endTime - startTime);
-
-        long milliseconds = duration / 1_000_000;
-        System.out.printf("Execution time: %d milliseconds\n", milliseconds);
     }
 }
