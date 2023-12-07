@@ -70,18 +70,8 @@ public class HashIndexStorage<T> implements Storage<T> {
         try (var file = new RandomAccessFile(persistPath, "r")) {
             file.seek(offset);
 
-            var data = new StringBuilder();
-            int b;
-            while ((b = file.read()) != -1) {
-                char c = (char) b;
-                data.append(c);
-
-                if (c == END_CHAR) {
-                    break;
-                }
-            }
-            var json = extractValueFrom(data.toString());
-            return Optional.ofNullable(jsonSerializer.deserialize(json));
+            String value = extractValueFrom(file.readLine());
+            return Optional.ofNullable(jsonSerializer.deserialize(value));
         } catch (IOException e) {
             throw new StorageReadException(e.getMessage());
         }
@@ -92,9 +82,7 @@ public class HashIndexStorage<T> implements Storage<T> {
     }
 
     private void scheduleBackup() {
-        scheduler.scheduleAtFixedRate(() -> {
-            backupManager.backup(cache);
-        }, BACKUP_INTERVAL_MINUTES, 1, TimeUnit.MINUTES);
+        scheduler.scheduleAtFixedRate(() -> backupManager.backup(cache), BACKUP_INTERVAL_MINUTES, 1, TimeUnit.MINUTES);
     }
 
     private void load() {
