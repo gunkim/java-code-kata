@@ -49,7 +49,7 @@ public class HashIndexStorage<T> implements Storage<T> {
 
     @Override
     public void save(String key, T value) {
-        File file = new File(persistPath);
+        var file = new File(persistPath);
 
         long startPosition = file.length();
         try (var writer = new FileWriter(file, true)) {
