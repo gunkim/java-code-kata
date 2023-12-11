@@ -14,11 +14,11 @@ import java.util.TreeMap;
  * TODO: 백그라운드에서 sstable을 컴팩션하는 로직이 고려돼야 함.
  */
 public class LsmTreeStorage<T> implements Storage<T> {
+    private static final String SEGMENT_FILE_NAME = "database-%s";
+    private static final String SSTABLE_METADATA_FILE_NAME = "sstable-metadata";
     private static final int THRESHOLD = 1;
 
     private final Map<String, T> memTable = new TreeMap<>();
-
-
     private final String path;
 
     public LsmTreeStorage(String path) {
@@ -41,7 +41,7 @@ public class LsmTreeStorage<T> implements Storage<T> {
     }
 
     private void flush() {
-        var file = new File(path + "database-%s".formatted(LocalDateTime.now().toString()));
+        var file = new File(path + SEGMENT_FILE_NAME.formatted(LocalDateTime.now().toString()));
         try (var fileWriter = new FileWriter(file, false)) {
             for (var entry : memTable.entrySet()) {
                 String key = entry.getKey();
@@ -59,7 +59,7 @@ public class LsmTreeStorage<T> implements Storage<T> {
     }
 
     private void flushMetadata(String fileName) {
-        var file = new File(path + "sstable-metadata");
+        var file = new File(path + SSTABLE_METADATA_FILE_NAME);
         try (var fileWriter = new FileWriter(file, true)) {
             fileWriter.append(fileName).append("\n");
             fileWriter.flush();
