@@ -10,6 +10,7 @@ pluginManagement {
         id("org.jlleitschuh.gradle.ktlint") version ktlintVersion
     }
 }
+rootProject.name = "code-kata"
 
 include("lotto")
 include("rabbit-game")
@@ -17,6 +18,4 @@ include("hangman")
 include("car-racing")
 include("string-calculator")
 include("employees")
-
-rootProject.name = "code-kata"
 include("data-systems")
