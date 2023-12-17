@@ -1,4 +1,4 @@
-package io.github.gunkim.storage.serializer;
+package io.github.gunkim.engine.storage.serializer;
 
 public interface Serializer {
     String serialize(Object object);

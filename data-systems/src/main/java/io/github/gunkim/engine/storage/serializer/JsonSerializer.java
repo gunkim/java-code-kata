@@ -1,4 +1,4 @@
-package io.github.gunkim.storage.serializer;
+package io.github.gunkim.engine.storage.serializer;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;

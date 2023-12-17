@@ -1,4 +1,4 @@
-package io.github.gunkim.storage.exception;
+package io.github.gunkim.engine.storage.exception;
 
 public class BackupFailedException extends RuntimeException {
     public BackupFailedException(String message) {

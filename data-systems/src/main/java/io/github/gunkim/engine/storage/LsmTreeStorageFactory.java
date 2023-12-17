@@ -1,4 +1,4 @@
-package io.github.gunkim.storage;
+package io.github.gunkim.engine.storage;
 
 public class LsmTreeStorageFactory<T> implements StorageFactory<T> {
     @Override
