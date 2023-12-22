@@ -1,5 +1,9 @@
 package io.github.gunkim.replication.server;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.ServerSocket;
 import java.util.logging.Logger;
 
 public class MasterServer {
@@ -34,9 +38,34 @@ public class MasterServer {
     }
 
     public void start() {
-        throw new UnsupportedOperationException("Not implemented yet");
+        backgroundRun(() -> {
+            LOGGER.info("Master server started on port %d".formatted(port));
+
+            while (true) {
+                LOGGER.info("Waiting for replication request...");
+                try (var serverSocket = new ServerSocket(port);
+                     var socket = serverSocket.accept();
+                     var dataInputStream = new DataInputStream(socket.getInputStream())) {
+                    var request = dataInputStream.readUTF();
+                    if (request.startsWith("REPLICATION_REQUEST")) {
+                        var data = dataStore.export();
+                        var response = "REPLICATION_RESPONSE:%s".formatted(data);
+                        try (var dataOutputStream = new DataOutputStream(socket.getOutputStream())) {
+                            dataOutputStream.writeUTF(response);
+                        }
+                    }
+
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
     }
 
     public record Metadata(String host, int port) {
+    }
+
+    private void backgroundRun(Runnable runnable) {
+        new Thread(runnable).start();
     }
 }

@@ -21,4 +21,8 @@ public class DataStore {
     public String get(String key) {
         return data.get(key);
     }
+
+    public Map<String, String> export() {
+        return new HashMap<>(data);
+    }
 }

@@ -2,13 +2,35 @@ package io.github.gunkim.replication;
 
 import io.github.gunkim.replication.server.MasterServer;
 
-import java.util.List;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.Socket;
 
 public class Main {
     public static void main(String[] args) {
-        new Orchestrator().run(new MasterServer(8080),
-                // 5개의 슬레이브 서버를 생성
-                List.of(8081, 8082, 8083, 8084, 8085)
-        );
+        var masterServer = new MasterServer(8080);
+        masterServer.start();
+
+        masterServer.put("key1", "value1");
+
+        while (true) {
+            try (var client = new Socket("localhost", 8080);
+                 var dataOutputStream = new DataOutputStream(client.getOutputStream())) {
+                dataOutputStream.writeUTF("REPLICATION_REQUEST");
+
+                try (var dataInputStream = new DataInputStream(client.getInputStream())) {
+                    var response = dataInputStream.readUTF();
+                    System.out.println(response);
+                    return;
+                }
+            } catch (IOException e) {
+                try {
+                    Thread.sleep(1_000);
+                } catch (InterruptedException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        }
     }
 }
