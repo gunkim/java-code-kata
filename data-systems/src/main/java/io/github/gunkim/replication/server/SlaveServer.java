@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.net.Socket;
 import java.util.Map;
 
-public class SlaveServer {
+public class SlaveServer implements Readable {
     private static final Logger LOGGER = LoggerFactory.getLogger(SlaveServer.class);
     private static final int MAX_RETRY_COUNT = 5;
     private static final int RETRY_DELAY_MS = 1_000;
@@ -35,6 +35,12 @@ public class SlaveServer {
 
     public void stop() {
         running = false;
+    }
+
+
+    @Override
+    public String read(String key) {
+        return data.get(key);
     }
 
     private void attemptConnection() {
@@ -88,6 +94,7 @@ public class SlaveServer {
         Map<String, String> deserializedData = new JsonSerializer().deserialize(response);
         data.replace(deserializedData);
         LOGGER.info("Replication completed successfully.");
+        System.out.println(deserializedData);
     }
 
     private void sleep(int durationMs) {

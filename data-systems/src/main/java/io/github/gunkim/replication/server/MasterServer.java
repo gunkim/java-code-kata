@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class MasterServer {
+public class MasterServer implements Readable, Writable {
     private static final Logger LOGGER = LoggerFactory.getLogger(MasterServer.class);
     private static final int DEFAULT_PORT = 8080;
     private static final String REPLICATION_REQUEST_PREFIX = "REPLICATION_REQUEST";
@@ -27,14 +27,6 @@ public class MasterServer {
         this(DEFAULT_PORT);
     }
 
-    public void put(String key, String value) {
-        dataStore.put(key, value);
-    }
-
-    public String get(String key) {
-        return dataStore.get(key);
-    }
-
     public int port() {
         return port;
     }
@@ -49,6 +41,16 @@ public class MasterServer {
 
     public void stop() {
         running = false;
+    }
+
+    @Override
+    public String read(String key) {
+        return dataStore.get(key);
+    }
+
+    @Override
+    public void write(String key, String value) {
+        dataStore.put(key, value);
     }
 
     private void acceptConnections() {
