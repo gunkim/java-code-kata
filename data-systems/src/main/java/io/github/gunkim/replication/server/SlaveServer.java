@@ -18,10 +18,9 @@ public class SlaveServer implements Readable {
     private static final int REPLICATION_DELAY_MS = 5_000;
 
     private final DataStore data = new DataStore(false);
-    private final MasterServer.Metadata masterMetadata;
-    private volatile boolean running = true;
+    private final MasterMetadata masterMetadata;
 
-    public SlaveServer(MasterServer.Metadata masterMetadata) {
+    public SlaveServer(MasterMetadata masterMetadata) {
         this.masterMetadata = masterMetadata;
     }
 
@@ -33,11 +32,6 @@ public class SlaveServer implements Readable {
         runInBackground(this::attemptConnection);
     }
 
-    public void stop() {
-        running = false;
-    }
-
-
     @Override
     public String read(String key) {
         return data.get(key);
@@ -45,32 +39,32 @@ public class SlaveServer implements Readable {
 
     private void attemptConnection() {
         int retryCount = 0;
-        while (running) {
-            if (retryCount >= MAX_RETRY_COUNT) {
-                LOGGER.error("Failed to connect to Master server at {}:{} after {} attempts",
-                        masterMetadata.host(), masterMetadata.port(), MAX_RETRY_COUNT);
-                throw new ConnectionRetryFailedException("Max retry count reached for master server connection.");
-            }
+
+        while (true) {
+            handleMaxRetryReached(retryCount);
+
             if (connectAndSync()) {
                 retryCount = 0;
             } else {
                 retryCount++;
             }
+
             sleep(RETRY_DELAY_MS);
         }
     }
 
-    /**
-     * TODO: DataOutputStream or DataInputStream을 Request, Response 객체로 각각 캡슐화하는게 더 좋을 것 같음.
-     * TODO: 그리고 요청 유형에 따른 핸들러가 있어야 책임 분리가 확실히 가능할 듯?
-     *
-     * @return
-     */
+    private void handleMaxRetryReached(int retryCount) {
+        if (retryCount >= MAX_RETRY_COUNT) {
+            LOGGER.error("Failed to connect to Master server at {}:{} after {} attempts",
+                    masterMetadata.host(), masterMetadata.port(), MAX_RETRY_COUNT);
+            throw new ConnectionRetryFailedException("Max retry count reached for master server connection.");
+        }
+    }
+
     private boolean connectAndSync() {
         try (Socket client = new Socket(masterMetadata.host(), masterMetadata.port());
              DataOutputStream dataOutputStream = new DataOutputStream(client.getOutputStream());
              DataInputStream dataInputStream = new DataInputStream(client.getInputStream())) {
-
             syncReplication(dataOutputStream, dataInputStream);
             sleep(REPLICATION_DELAY_MS);
             return true;
@@ -89,12 +83,13 @@ public class SlaveServer implements Readable {
      * @throws IOException
      */
     private void syncReplication(DataOutputStream dataOutputStream, DataInputStream dataInputStream) throws IOException {
-        dataOutputStream.writeUTF("REPLICATION_REQUEST");
-        String response = dataInputStream.readUTF().replace("REPLICATION_RESPONSE:", "");
+        dataOutputStream.writeUTF("");
+
+        String response = dataInputStream.readUTF();
         Map<String, String> deserializedData = new JsonSerializer().deserialize(response);
         data.replace(deserializedData);
+
         LOGGER.info("Replication completed successfully.");
-        System.out.println(deserializedData);
     }
 
     private void sleep(int durationMs) {
@@ -108,5 +103,16 @@ public class SlaveServer implements Readable {
 
     private void runInBackground(Runnable task) {
         new Thread(task).start();
+    }
+
+    public record MasterMetadata(String host, int port) {
+        public MasterMetadata {
+            if (host == null || host.isBlank()) {
+                throw new IllegalArgumentException("Host cannot be null or blank.");
+            }
+            if (port < 0 || port > 65535) {
+                throw new IllegalArgumentException("Port must be between 0 and 65535.");
+            }
+        }
     }
 }
