@@ -23,4 +23,4 @@
 
 ### CS
 
-- [데이터 시스템 구현 (LSM-Tree, B-Tree, Columnar Storage)](/data-systems)
+- [데이터 시스템 구현 (LSM-Tree, B-Tree, Replication)](/data-systems)
