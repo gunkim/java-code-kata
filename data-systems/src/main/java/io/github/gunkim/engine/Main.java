@@ -1,6 +1,6 @@
 package io.github.gunkim.engine;
 
-import io.github.gunkim.engine.storage.HashIndexStorageFactory;
+import io.github.gunkim.engine.storage.LsmTreeStorageFactory;
 import io.github.gunkim.engine.storage.Storage;
 import io.github.gunkim.engine.storage.StorageFactory;
 
@@ -11,7 +11,7 @@ public class Main {
     private static final String SAVE_PATH = "./";
 
     public static void main(String[] args) {
-        StorageFactory<Map<String, Object>> storageFactory = new HashIndexStorageFactory<>();
+        StorageFactory<Map<String, Object>> storageFactory = new LsmTreeStorageFactory<>();
         Storage<Map<String, Object>> storage = storageFactory.createSimpleStorage(SAVE_PATH);
 
         storage.save("123456", Map.of(
