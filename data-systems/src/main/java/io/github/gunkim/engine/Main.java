@@ -6,6 +6,7 @@ import io.github.gunkim.engine.storage.StorageFactory;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.IntStream;
 
 public class Main {
     private static final String SAVE_PATH = "./";
@@ -14,10 +15,12 @@ public class Main {
         StorageFactory<Map<String, Object>> storageFactory = new LsmTreeStorageFactory<>();
         Storage<Map<String, Object>> storage = storageFactory.createSimpleStorage(SAVE_PATH);
 
-        storage.save("123456", Map.of(
-                "name", "London",
-                "attractions", List.of("Big Ben", "London Eye3")
-        ));
+        IntStream.rangeClosed(1, 500).forEach(i -> {
+            storage.save(String.valueOf(i), Map.of(
+                    "name", "London",
+                    "attractions", List.of("Big Ben", "London Eye3")
+            ));
+        });
 
         StopWatch.run(() -> {
             var data = storage.find("123456");

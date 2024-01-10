@@ -3,20 +3,26 @@ package io.github.gunkim.engine.storage;
 import io.github.gunkim.engine.storage.exception.StorageReadException;
 import io.github.gunkim.engine.storage.exception.StorageWriteException;
 import io.github.gunkim.engine.storage.serializer.JsonSerializer;
-
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.TreeMap;
 import java.util.stream.Stream;
 
 /**
  * TODO: 백그라운드에서 sstable을 컴팩션하는 로직이 고려돼야 함.
  */
 public class LsmTreeStorage<T> implements Storage<T> {
+
     private static final int MAX_LEVEL = 6;
     private static final int THRESHOLD = 5;
 
@@ -35,6 +41,8 @@ public class LsmTreeStorage<T> implements Storage<T> {
     public void save(String key, T value) {
         if (memTable.size() >= THRESHOLD) {
             flush();
+            //인스턴스 변수로 제공하는게 좋을 듯.
+            new CompationManager().start();
         }
         memTable.put(key, value);
     }
@@ -68,8 +76,7 @@ public class LsmTreeStorage<T> implements Storage<T> {
     }
 
     /**
-     * 해당 레벨의 SS-Table 내에 해당 키가 존재하는지 검색한다.
-     * 이 때 SS-Table들에서 Key가 중복될 수 있으므로, 가장 최신의 SS-Table을 우선적으로 검색한다.
+     * 해당 레벨의 SS-Table 내에 해당 키가 존재하는지 검색한다. 이 때 SS-Table들에서 Key가 중복될 수 있으므로, 가장 최신의 SS-Table을 우선적으로 검색한다.
      *
      * @param level
      * @param key
@@ -95,8 +102,7 @@ public class LsmTreeStorage<T> implements Storage<T> {
     }
 
     /**
-     * SS-Table 내에 해당 키가 존재하는지 검색한다.
-     * 이 때 SS-Table은 Memtable이 그대로 Flush되기 때문에 Key가 중복될 수 없다.
+     * SS-Table 내에 해당 키가 존재하는지 검색한다. 이 때 SS-Table은 Memtable이 그대로 Flush되기 때문에 Key가 중복될 수 없다.
      *
      * @param sstable
      * @param key
