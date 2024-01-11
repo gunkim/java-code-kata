@@ -7,14 +7,15 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Map.Entry;
+import java.util.SortedMap;
 import java.util.TreeMap;
-import java.util.stream.Stream;
 
 public class CompationManager extends Thread {
 
     //TODO: 환경변수 값으로 받을 수 있어야 함.
-    private final String path = "lsm-tree/sstable/data/level-%d";
+    private final String path = "./lsm-tree/sstable/data/level-%d";
 
     @Override
     public synchronized void start() {
@@ -28,14 +29,15 @@ public class CompationManager extends Thread {
     private void compation(Level level) {
         var ssTables = ssTables(level);
 
-        var newSSTableCompatiningMap = new TreeMap<String, String>();
+        SortedMap<String, String> newSSTableCompatiningMap = new TreeMap<>();
         ssTables.forEach(ssTable -> compation(ssTable, newSSTableCompatiningMap));
 
         var newSSTablePath = String.format(path + "/sstable-%s", level.nextLevel(), generateIdentifier());
 
+        existsDirectory(new File(newSSTablePath));
         try (var fileWriter = new FileWriter(newSSTablePath)) {
             for (Entry<String, String> stringStringEntry : newSSTableCompatiningMap.entrySet()) {
-                fileWriter.write(stringStringEntry.getKey() + "," + stringStringEntry.getValue());
+                fileWriter.write("%s,%s\n".formatted(stringStringEntry.getKey(), stringStringEntry.getValue()));
             }
             fileWriter.flush();
         } catch (IOException e) {
@@ -51,7 +53,7 @@ public class CompationManager extends Thread {
         return identifierFormat.format(new Date());
     }
 
-    private void compation(File ssTable, TreeMap<String, String> newSSTableCompatiningMap) {
+    private void compation(File ssTable, SortedMap<String, String> newSSTableCompatiningMap) {
         try (var fileReader = Files.newBufferedReader(ssTable.toPath())) {
             String line;
             while ((line = fileReader.readLine()) != null) {
@@ -70,11 +72,12 @@ public class CompationManager extends Thread {
 
 
     private boolean isCompactionRequired(Level level) {
-        var ssTableCount = ssTables(level).count();
+        var ssTableCount = ssTables(level).size();
+
         return level.isCompactionRequired(ssTableCount);
     }
 
-    private Stream<File> ssTables(Level level) {
+    private List<File> ssTables(Level level) {
         var path = level.ssTablePath(this.path);
 
         try {
@@ -82,10 +85,10 @@ public class CompationManager extends Thread {
             return files
                     .sorted()
                     .filter(Files::isRegularFile)
-                    .map(Path::toFile);
+                    .map(Path::toFile)
+                    .toList();
         } catch (IOException e) {
-            //TODO 더 적절한 예외를 던지는게 좋을 것 같음.
-            throw new RuntimeException(e);
+            return List.of();
         }
     }
 

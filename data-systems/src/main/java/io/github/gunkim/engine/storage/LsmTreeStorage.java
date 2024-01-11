@@ -13,8 +13,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
+import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.stream.Stream;
 
@@ -29,7 +29,7 @@ public class LsmTreeStorage<T> implements Storage<T> {
     private static final String SSTABLE_DIRECTORY_NAME = "/sstable";
     private static final String SSTABLE_FILE_NAME = SSTABLE_DIRECTORY_NAME + "/data/level-%d/sstable-%s";
 
-    private final Map<String, T> memTable = new TreeMap<>();
+    private final SortedMap<String, T> memTable = new TreeMap<>();
     private final JsonSerializer jsonSerializer = new JsonSerializer();
     private final String path;
 
