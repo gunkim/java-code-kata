@@ -15,15 +15,15 @@ public class Main {
         StorageFactory<Map<String, Object>> storageFactory = new LsmTreeStorageFactory<>();
         Storage<Map<String, Object>> storage = storageFactory.createSimpleStorage(SAVE_PATH);
 
-        IntStream.rangeClosed(1, 500).forEach(i -> {
-            storage.save(String.valueOf(i), Map.of(
-                    "name", "London",
-                    "attractions", List.of("Big Ben", "London Eye3")
-            ));
-        });
+//        IntStream.rangeClosed(1, 500).forEach(i -> {
+//            storage.save(String.valueOf(i), Map.of(
+//                    "name", "London",
+//                    "attractions", List.of("Big Ben", "London Eye3")
+//            ));
+//        });
 
         StopWatch.run(() -> {
-            var data = storage.find("123456");
+            var data = storage.find("101");
             data.ifPresent(System.out::println);
         });
     }

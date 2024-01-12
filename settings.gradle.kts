@@ -10,6 +10,9 @@ pluginManagement {
         id("org.jlleitschuh.gradle.ktlint") version ktlintVersion
     }
 }
+plugins {
+    id("org.gradle.toolchains.foojay-resolver-convention") version "0.5.0"
+}
 rootProject.name = "code-kata"
 
 include("lotto")
@@ -19,3 +22,4 @@ include("car-racing")
 include("string-calculator")
 include("employees")
 include("data-systems")
+include("notifications")
