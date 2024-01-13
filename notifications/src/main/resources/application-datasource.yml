@@ -15,10 +15,14 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create-drop
-
-datasource:
-  hikari:
-    driver-class-name: org.h2.Driver
-    jdbc-url: jdbc:h2:mem:testdb
-    username: sa
-    password:
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      timeout: 3000
+  datasource:
+    hikari:
+      driver-class-name: org.h2.Driver
+      jdbc-url: jdbc:h2:mem:testdb
+      username: sa
+      password:
