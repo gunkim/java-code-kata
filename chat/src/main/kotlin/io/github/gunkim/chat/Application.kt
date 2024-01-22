@@ -1,4 +1,4 @@
-package io.github.gunkim.notifications
+package io.github.gunkim.chat
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
