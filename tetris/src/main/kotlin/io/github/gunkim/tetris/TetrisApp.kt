@@ -1,4 +1,4 @@
-package io.github.gunkim.io.github.gunkim.tetris
+package io.github.gunkim.tetris
 
 import javafx.application.Application
 import javafx.geometry.Insets
