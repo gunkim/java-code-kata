@@ -1,7 +1,0 @@
-spring:
-  profiles:
-    active: dev
-    include: [ datasource ]
-    group:
-      local: [ local-h2 ]
-      dev: [ dev-mysql ]
