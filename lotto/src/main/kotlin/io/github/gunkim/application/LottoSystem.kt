@@ -20,9 +20,9 @@ class LottoSystem(
         output.buyMoneyInputMessage()
         val money = input.money
 
-        val lottos: List<Lotto> = lottoMachine.buy(money)
-        output.buyResultMessage(lottos.size)
-        output.showLotto(lottos)
+        val purchasedLottos: List<Lotto> = lottoMachine.buy(money)
+        output.buyResultMessage(purchasedLottos.size)
+        output.showLotto(purchasedLottos)
 
         output.winningNumbersInputMessage()
         val winning = Lotto.from(input.winningNumbers)
@@ -32,7 +32,7 @@ class LottoSystem(
 
         val winningLotto = WinningLotto(winning, bonusNumber)
 
-        val results: Map<Rank, Int> = lottos
+        val results: Map<Rank, Int> = purchasedLottos
             .map(winningLotto::matches)
             .map { Rank.ranking(it.first, it.second) }
             .groupingBy { it }.eachCount()
