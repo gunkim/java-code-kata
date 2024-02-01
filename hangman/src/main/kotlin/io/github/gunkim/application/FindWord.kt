@@ -3,7 +3,7 @@ package io.github.gunkim.application
 import io.github.gunkim.domain.Word
 import io.github.gunkim.domain.Words
 
-interface FindWord {
+fun interface FindWord {
     fun find(): Word
 
     class DefaultFindWord(

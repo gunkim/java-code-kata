@@ -6,13 +6,13 @@ import io.github.gunkim.domain.Words
 class FileReadWords(
     private val fileName: String
 ) : Words {
-    override fun findRandom(): Word {
-        val words = bufferedReader()
+    private val words: List<Word> by lazy {
+        bufferedReader()
             .readLines()
             .map(Word.Companion::from)
-
-        return words.random()
     }
+
+    override fun findRandom(): Word = words.random()
 
     private fun bufferedReader() = ClassLoader.getSystemClassLoader()
         .getResourceAsStream(fileName)

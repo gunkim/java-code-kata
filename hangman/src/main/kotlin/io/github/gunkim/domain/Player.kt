@@ -1,10 +1,8 @@
 package io.github.gunkim.domain
 
-import java.util.*
-
 data class Player(
     val problem: Word,
-    val letters: SortedMap<Int, Letter> = sortedMapOf()
+    val letters: MutableMap<Int, Letter> = sortedMapOf()
 ) {
     val isCorrect: Boolean
         get() = letters.size == problem.length
