@@ -1,12 +1,6 @@
 package io.github.gunkim;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.NoSuchElementException;
-import org.jetbrains.annotations.NotNull;
+import java.util.*;
 
 public class MyArrayList<T> implements List<T> {
 
@@ -35,32 +29,19 @@ public class MyArrayList<T> implements List<T> {
     }
 
     @Override
-    public boolean addAll(@NotNull Collection<? extends T> collection) {
-        int realSize = array.length;
-        int requiredSize = size + collection.size();
-
-        if (requiredSize >= realSize) {
-            expandArrayIfFull(requiredSize * DEFAULT_ARRAY_EXPANSION_FACTOR);
-        }
-        for (T o : collection) {
-            addData(o);
-        }
+    public boolean addAll(Collection<? extends T> collection) {
+        addAll(size, collection);
         return true;
     }
 
     @Override
-    public boolean addAll(int index, @NotNull Collection<? extends T> collection) {
+    public boolean addAll(int index, Collection<? extends T> collection) {
         if (index > size || index < 0) {
             throw new IndexOutOfBoundsException();
         }
-        if (index == size) {
-            addAll(collection);
-            return true;
-        }
 
-        int realSize = array.length;
         int requiredSize = (size + collection.size()) - (size - index);
-        if (requiredSize >= realSize) {
+        if (requiredSize >= array.length) {
             expandArrayIfFull(requiredSize * DEFAULT_ARRAY_EXPANSION_FACTOR);
         }
 
@@ -110,13 +91,7 @@ public class MyArrayList<T> implements List<T> {
             throw new IndexOutOfBoundsException();
         }
 
-        for (int i = 0; i < array.length; i++) {
-            if (i == index) {
-                return array[i];
-            }
-        }
-
-        return null;
+        return array[index];
     }
 
     @Override
@@ -170,28 +145,11 @@ public class MyArrayList<T> implements List<T> {
         return indexOf(o) != INDEX_NOT_FOUND;
     }
 
-    @NotNull
     @Override
     public Iterator<T> iterator() {
-        return new Iterator<T>() {
-            private int currentIndex = 0;
-
-            @Override
-            public boolean hasNext() {
-                return currentIndex < size;
-            }
-
-            @Override
-            public T next() {
-                if (!hasNext()) {
-                    throw new NoSuchElementException();
-                }
-                return array[currentIndex++];
-            }
-        };
+        return new MyIterator();
     }
 
-    @NotNull
     @Override
     @SuppressWarnings("unchecked")
     public T[] toArray() {
@@ -202,44 +160,48 @@ public class MyArrayList<T> implements List<T> {
         return (T[]) arr;
     }
 
-    @NotNull
     @Override
     public ListIterator listIterator() {
         throw new RuntimeException("TODO");
     }
 
-    @NotNull
     @Override
     public ListIterator listIterator(int index) {
         throw new RuntimeException("TODO");
     }
 
-    @NotNull
     @Override
     public List subList(int fromIndex, int toIndex) {
         throw new RuntimeException("TODO");
     }
 
     @Override
-    public boolean retainAll(@NotNull Collection c) {
+    public boolean retainAll(Collection c) {
         throw new RuntimeException("TODO");
     }
 
     @Override
-    public boolean removeAll(@NotNull Collection c) {
+    public boolean removeAll(Collection c) {
         throw new RuntimeException("TODO");
     }
 
     @Override
-    public boolean containsAll(@NotNull Collection c) {
+    public boolean containsAll(Collection c) {
         throw new RuntimeException("TODO");
     }
 
-    @NotNull
     @Override
     @SuppressWarnings("unchecked")
-    public T[] toArray(@NotNull Object[] a) {
+    public T[] toArray(Object[] a) {
         return (T[]) new Object[0];
+    }
+
+    @Override
+    public String toString() {
+        return "MyArrayList{" +
+                "array=" + Arrays.toString(array) +
+                ", size=" + size +
+                '}';
     }
 
     private void addData(T data) {
@@ -258,10 +220,20 @@ public class MyArrayList<T> implements List<T> {
         }
     }
 
-    @Override
-    public String toString() {
-        return """
-                MyArrayList(array=%s, size=%d)
-                """.stripIndent().formatted(Arrays.toString(array), size);
+    private class MyIterator implements Iterator<T> {
+        private int currentIndex = 0;
+
+        @Override
+        public boolean hasNext() {
+            return currentIndex < size;
+        }
+
+        @Override
+        public T next() {
+            if (!hasNext()) {
+                throw new NoSuchElementException();
+            }
+            return array[currentIndex++];
+        }
     }
 }
