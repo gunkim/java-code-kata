@@ -13,12 +13,13 @@ data class Word(val letters: List<Letter>) {
     fun indexOf(letter: Letter): Int = letters.indexOf(letter)
 
     companion object {
-        fun from(word: String) = Word(
-            word.split("")
+        private const val WORD_SPLITTER = ""
+        private const val MAX_LENGTH = 8
+
+        fun from(word: String) =
+            word.split(WORD_SPLITTER)
                 .filter(String::isNotBlank)
                 .map(::Letter)
-        )
-
-        private const val MAX_LENGTH = 8
+                .let(::Word)
     }
 }

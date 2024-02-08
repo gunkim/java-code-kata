@@ -12,6 +12,6 @@ data class Player(
         if (index == -1) return this
 
         val newLetters = letters.apply { this[index] = letter }
-        return Player(problem, newLetters)
+        return copy(letters = newLetters)
     }
 }
