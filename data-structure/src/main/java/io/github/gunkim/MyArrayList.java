@@ -187,11 +187,10 @@ public class MyArrayList<T> implements List<T> {
     @Override
     public String toString() {
         return "MyArrayList{" +
-                "array=" + Arrays.toString(array) +
+                "array=" + Arrays.toString(toArray()) +
                 ", size=" + size +
                 '}';
     }
-
 
     @Override
     public ListIterator listIterator() {
