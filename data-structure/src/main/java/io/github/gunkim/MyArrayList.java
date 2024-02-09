@@ -80,6 +80,14 @@ public class MyArrayList<T> implements List<T> {
     }
 
     @Override
+    public boolean removeAll(Collection c) {
+        for (Object o : c) {
+            remove(o);
+        }
+        return true;
+    }
+
+    @Override
     public void clear() {
         Arrays.fill(array, null);
         size = 0;
@@ -146,6 +154,16 @@ public class MyArrayList<T> implements List<T> {
     }
 
     @Override
+    public boolean containsAll(Collection c) {
+        for (Object o : c) {
+            if (!contains(o)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
     public Iterator<T> iterator() {
         return new MyIterator();
     }
@@ -161,36 +179,6 @@ public class MyArrayList<T> implements List<T> {
     }
 
     @Override
-    public ListIterator listIterator() {
-        throw new RuntimeException("TODO");
-    }
-
-    @Override
-    public ListIterator listIterator(int index) {
-        throw new RuntimeException("TODO");
-    }
-
-    @Override
-    public List subList(int fromIndex, int toIndex) {
-        throw new RuntimeException("TODO");
-    }
-
-    @Override
-    public boolean retainAll(Collection c) {
-        throw new RuntimeException("TODO");
-    }
-
-    @Override
-    public boolean removeAll(Collection c) {
-        throw new RuntimeException("TODO");
-    }
-
-    @Override
-    public boolean containsAll(Collection c) {
-        throw new RuntimeException("TODO");
-    }
-
-    @Override
     @SuppressWarnings("unchecked")
     public T[] toArray(Object[] a) {
         return (T[]) new Object[0];
@@ -202,6 +190,27 @@ public class MyArrayList<T> implements List<T> {
                 "array=" + Arrays.toString(array) +
                 ", size=" + size +
                 '}';
+    }
+
+
+    @Override
+    public ListIterator listIterator() {
+        throw new RuntimeException("Not implemented");
+    }
+
+    @Override
+    public ListIterator listIterator(int index) {
+        throw new RuntimeException("Not implemented");
+    }
+
+    @Override
+    public List<T> subList(int fromIndex, int toIndex) {
+        throw new RuntimeException("Not implemented");
+    }
+
+    @Override
+    public boolean retainAll(Collection c) {
+        throw new RuntimeException("Not implemented");
     }
 
     private void addData(T data) {
