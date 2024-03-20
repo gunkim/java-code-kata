@@ -15,12 +15,12 @@
 
 ### OOP
 
-- [자동차 경주](jvm-code-kata/car-racing)
-- [로또](jvm-code-kata/lotto)
-- [행맨](jvm-code-kata/hangman)
-- [문자열 계산기](jvm-code-kata/string-calculator)
+- [자동차 경주](car-racing)
+- [로또](lotto)
+- [행맨](hangman)
+- [문자열 계산기](string-calculator)
 
 ### CS
 
-- [데이터 시스템 구현 (LSM-Tree, B-Tree, Replication)](jvm-code-kata/data-systems)
-- [자료구조 구현](jvm-code-kata/data-structure)
+- [데이터 시스템 구현 (LSM-Tree, B-Tree, Replication)](data-systems)
+- [자료구조 구현](data-structure)
