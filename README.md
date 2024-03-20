@@ -2,7 +2,6 @@
 
 ![Java_21](https://img.shields.io/badge/java-21-red?logo=openjdk&logoColor=white)
 ![Kotlin](https://img.shields.io/badge/Kotlin-1.9.20-purple?logo=kotlin)
-![Python 3](https://img.shields.io/badge/python-3-yellow?logo=python)
 [![GitHub stars](https://img.shields.io/github/stars/gunkim/code-kata)](https://github.com/gunkim/code-kata/stargazers)
 [![GitHub issues](https://img.shields.io/github/issues/gunkim/code-kata)](https://github.com/gunkim/code-kata/issues)
 [![GitHub forks](https://img.shields.io/github/forks/gunkim/code-kata)](https://github.com/gunkim/code-kata/network)
