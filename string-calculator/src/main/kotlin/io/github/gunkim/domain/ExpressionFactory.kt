@@ -6,9 +6,19 @@ class ExpressionFactory(private val expression: String) {
     }
 
     fun make() = Expression(
-        OPERATOR_PATTERN.split(expression).map(String::toInt),
-        NUMBER_PATTERN.split(expression).drop(1).dropLast(1).map(Operator.Companion::get)
+        convertExpressionToNumbers(expression),
+        convertExpressionToOperators(expression)
     )
+
+    private fun convertExpressionToNumbers(expression: String) =
+        OPERATOR_PATTERN.split(expression)
+            .map(String::toInt)
+
+    private fun convertExpressionToOperators(expression: String) =
+        NUMBER_PATTERN.split(expression)
+            .drop(1)
+            .dropLast(1)
+            .map(Operator.Companion::get)
 
     companion object {
         private val EXPRESSION_PATTERN = Regex("^(\\d+ [+\\-*/] )+(\\d)\$")
