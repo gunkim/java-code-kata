@@ -15,7 +15,7 @@ class RankTests : StringSpec({
             Triple(5, true, Rank.SECOND),
             Triple(6, false, Rank.FIRST)
         ).forEach { (hitCnt, isBonusHit, expectedRank) ->
-            val rank = Rank.ranking(hitCnt, isBonusHit)
+            val rank = Rank.determineRankBasedOnHits(hitCnt, isBonusHit)
 
             rank shouldBe expectedRank
         }

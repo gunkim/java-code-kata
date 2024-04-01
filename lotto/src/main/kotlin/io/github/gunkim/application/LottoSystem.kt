@@ -34,7 +34,7 @@ class LottoSystem(
 
         val results: Map<Rank, Int> = purchasedLottos
             .map(winningLotto::matches)
-            .map { Rank.ranking(it.first, it.second) }
+            .map { Rank.determineRankBasedOnHits(it.first, it.second) }
             .groupingBy { it }.eachCount()
         output.showStatistics(results)
     }

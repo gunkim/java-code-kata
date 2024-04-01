@@ -17,12 +17,14 @@ enum class Rank(
     operator fun component2(): Int = matchCnt
 
     companion object {
-        fun ranking(hitCnt: Int, isBonusHit: Boolean): Rank = when (hitCnt) {
+        fun determineRankBasedOnHits(hitCnt: Int, isBonusHit: Boolean): Rank = when (hitCnt) {
             FIRST.matchCnt -> FIRST
-            SECOND.matchCnt -> if (isBonusHit) SECOND else THIRD
+            SECOND.matchCnt -> determineRankByBonusHit(isBonusHit)
             FOURTH.matchCnt -> FOURTH
             FIFTH.matchCnt -> FIFTH
             else -> MISS
         }
+
+        private fun determineRankByBonusHit(isBonusHit: Boolean) = if (isBonusHit) SECOND else THIRD
     }
 }
