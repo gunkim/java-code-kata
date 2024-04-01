@@ -21,11 +21,11 @@ class ExpressionTests : StringSpec({
     }
     "피연산자가 연산자보다 1만큼 크지 않을 경우 인스턴스 생성에 실패한다" {
         shouldThrow<IllegalArgumentException> {
-            Expression(listOf(1, 2), listOf(Operator.DIVIDE, Operator.MULTPLY))
+            Expression(listOf(1, 2), listOf(Operator.DIVIDE, Operator.MULTIPLY))
         }.apply { message shouldBe "연산자는 피연산자보다 1개 적어야 합니다." }
     }
     "연산 결과를 반환한다" {
-        val expression = Expression(listOf(1, 2, 3), listOf(Operator.PLUS, Operator.MULTPLY))
+        val expression = Expression(listOf(1, 2, 3), listOf(Operator.PLUS, Operator.MULTIPLY))
         val result = expression.execute()
 
         result shouldBe 9

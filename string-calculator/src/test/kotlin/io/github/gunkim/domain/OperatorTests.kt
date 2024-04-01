@@ -11,7 +11,7 @@ class OperatorTests : StringSpec({
         listOf(
             "+" to Operator.PLUS,
             "-" to Operator.MINUS,
-            "*" to Operator.MULTPLY,
+            "*" to Operator.MULTIPLY,
             "/" to Operator.DIVIDE
         ).forEach { (operator, expectedValue) ->
             Operator.get(operator) shouldBe expectedValue
@@ -25,7 +25,7 @@ class OperatorTests : StringSpec({
         listOf(
             Operator.PLUS to 3,
             Operator.MINUS to -1,
-            Operator.MULTPLY to 2,
+            Operator.MULTIPLY to 2,
             Operator.DIVIDE to 0
         ).forEach { (operator, expectedValue) ->
             val result = operator.execute(1, 2)
