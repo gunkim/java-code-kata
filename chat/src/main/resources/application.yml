@@ -1,6 +1,0 @@
-spring:
-  profiles:
-    active: local
-    include: [ logging, docker, datasource ]
-    group:
-      local: [ local-datasource ]

@@ -1,4 +1,0 @@
-logging:
-  level:
-    org.hibernate.type.descriptor.sql: trace
-    org.springframework.web: debug
