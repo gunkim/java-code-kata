@@ -47,7 +47,7 @@ public class LsmTreeStorage<T> implements Storage<T> {
         memTable.put(key, value);
     }
 
-    //TODO: memtable에 없을 경우 sstable에서 찾는 로직과 블룸 필터에 대한 로직이 고려돼야 함.
+    //TODO: memtable에 없을 경우 블룸 필터(sstable에 해당 키값이 실제로 존재하긴 하는지)에 대한 로직이 고려돼야 함.
     @Override
     public Optional<T> find(String key) {
         return Optional.ofNullable(memTable.get(key))
