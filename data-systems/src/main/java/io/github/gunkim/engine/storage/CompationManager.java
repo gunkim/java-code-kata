@@ -18,7 +18,7 @@ public class CompationManager extends Thread {
     private final String path = "./lsm-tree/sstable/data/level-%d";
 
     @Override
-    public synchronized void start() {
+    public void start() {
         for (Level level : Level.values()) {
             if (isCompactionRequired(level)) {
                 compation(level);
@@ -100,12 +100,12 @@ public class CompationManager extends Thread {
     }
 
     enum Level {
-        LEVEL_1(1, 10),
-        LEVEL_2(2, 100),
-        LEVEL_3(3, 1_000),
-        LEVEL_4(4, 10_000),
-        LEVEL_5(5, 100_000),
-        LEVEL_6(6, 1_000_000);
+        LEVEL_1(1, 2),
+        LEVEL_2(2, 4),
+        LEVEL_3(3, 8),
+        LEVEL_4(4, 16),
+        LEVEL_5(5, 32),
+        LEVEL_6(6, 64);
 
         private final int level;
         //SS-Table의 갯수가 threshold를 넘어가면 컴팩션을 수행함.
