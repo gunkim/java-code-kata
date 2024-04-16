@@ -23,6 +23,8 @@ import java.util.stream.Stream;
  */
 public class LsmTreeStorage<T> implements Storage<T> {
 
+    private static final CompationManager COMPATION_MANAGER = new CompationManager();
+
     private static final int MAX_LEVEL = 6;
     private static final int THRESHOLD = 5;
 
@@ -41,8 +43,7 @@ public class LsmTreeStorage<T> implements Storage<T> {
     public void save(String key, T value) {
         runIfMemtableFull(() -> {
             flush();
-            //TODO 인스턴스 변수로 제공하는게 좋을 듯.
-            new CompationManager().start();
+            COMPATION_MANAGER.start();
         });
         memTable.put(key, value);
     }
