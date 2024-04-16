@@ -19,15 +19,15 @@ import java.util.TreeMap;
 import java.util.stream.Stream;
 
 /**
- * TODO: 백그라운드에서 sstable을 컴팩션하는 로직이 고려돼야 함.
+ * <p>LSM-Tree 개념 학습을 위해 구현하는 객체이기 때문에 동시성을 위한 동기화 로직은 고려하지 않는다.</p>
  */
 public class LsmTreeStorage<T> implements Storage<T> {
 
     private static final int MAX_LEVEL = 6;
     private static final int THRESHOLD = 5;
 
-    private static final String SSTABLE_DIRECTORY_NAME = "/sstable";
-    private static final String SSTABLE_FILE_NAME = SSTABLE_DIRECTORY_NAME + "/data/level-%d/sstable-%s";
+    private static final String SS_TABLE_DIRECTORY_NAME = "/sstable";
+    private static final String SS_TABLE_FILE_NAME = SS_TABLE_DIRECTORY_NAME + "/data/level-%d/sstable-%s";
 
     private final SortedMap<String, T> memTable = new TreeMap<>();
     private final JsonSerializer jsonSerializer = new JsonSerializer();
@@ -39,11 +39,11 @@ public class LsmTreeStorage<T> implements Storage<T> {
 
     @Override
     public void save(String key, T value) {
-        if (memTable.size() >= THRESHOLD) {
+        runIfMemtableFull(() -> {
             flush();
-            //인스턴스 변수로 제공하는게 좋을 듯.
+            //TODO 인스턴스 변수로 제공하는게 좋을 듯.
             new CompationManager().start();
-        }
+        });
         memTable.put(key, value);
     }
 
@@ -76,11 +76,12 @@ public class LsmTreeStorage<T> implements Storage<T> {
     }
 
     /**
-     * 해당 레벨의 SS-Table 내에 해당 키가 존재하는지 검색한다. 이 때 SS-Table들에서 Key가 중복될 수 있으므로, 가장 최신의 SS-Table을 우선적으로 검색한다.
+     * <p>해당 레벨의 SS-Table 내에 해당 키가 존재하는지 검색한다.</p>
+     * <p>SS-Table들에서 Key가 중복될 가능성이 있으므로, 가장 최신의(시간 지역성) SS-Table을 우선적으로 검색한다.</p>
      *
-     * @param level
-     * @param key
-     * @return
+     * @param level 해당 key를 검색하려는 ss-table 레벨
+     * @param key   찾고자 하는 value의 key값
+     * @return key의 해당하는 value
      */
     private Optional<T> searchKeyInLevelSSTables(int level, String key) throws IOException {
         //TODO: 해당 경로 값을 상수로 빼야 함.
@@ -102,11 +103,12 @@ public class LsmTreeStorage<T> implements Storage<T> {
     }
 
     /**
-     * SS-Table 내에 해당 키가 존재하는지 검색한다. 이 때 SS-Table은 Memtable이 그대로 Flush되기 때문에 Key가 중복될 수 없다.
+     * <p>SS-Table 내에 해당 키가 존재하는지 검색한다.</p>
+     * <p>단일 SS-Table 내의 Key값 Memtable(중복 없음)이 그대로 Flush되기 때문에 Key가 중복될 수 없다.</p>
      *
-     * @param sstable
-     * @param key
-     * @return
+     * @param sstable 대상 SS-Table
+     * @param key     찾고자하는 Value의 Key
+     * @return 찾고자하는 Value
      * @throws IOException
      */
     private Optional<T> searchInFile(File sstable, String key) throws IOException {
@@ -145,7 +147,7 @@ public class LsmTreeStorage<T> implements Storage<T> {
     }
 
     private void flush() {
-        var file = new File(path + SSTABLE_FILE_NAME.formatted(1, generateIdentifier()));
+        var file = new File(path + SS_TABLE_FILE_NAME.formatted(1, generateIdentifier()));
         existsDirectory(file);
 
         try (var fileWriter = new FileWriter(file, false)) {
@@ -173,5 +175,11 @@ public class LsmTreeStorage<T> implements Storage<T> {
     private String generateIdentifier() {
         var identifierFormat = new SimpleDateFormat("yyMMddHHmmssSSS");
         return identifierFormat.format(new Date());
+    }
+
+    private void runIfMemtableFull(Runnable runnable) {
+        if (memTable.size() >= THRESHOLD) {
+            runnable.run();
+        }
     }
 }
