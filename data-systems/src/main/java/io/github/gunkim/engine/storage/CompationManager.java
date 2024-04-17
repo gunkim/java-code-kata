@@ -25,14 +25,14 @@ public class CompationManager extends Thread {
 
     @Override
     public void start() {
-        for (Level level : Level.values()) {
+        for (CompationLevel level : CompationLevel.values()) {
             if (isCompactionRequired(level)) {
                 compation(level);
             }
         }
     }
 
-    private void compation(Level level) {
+    private void compation(CompationLevel level) {
         var ssTables = ssTables(level);
 
         SortedMap<String, String> newSSTableCompatiningMap = new TreeMap<>();
@@ -75,13 +75,13 @@ public class CompationManager extends Thread {
     }
 
 
-    private boolean isCompactionRequired(Level level) {
+    private boolean isCompactionRequired(CompationLevel level) {
         var ssTableCount = ssTables(level).size();
 
         return level.isCompactionRequired(ssTableCount);
     }
 
-    private List<File> ssTables(Level level) {
+    private List<File> ssTables(CompationLevel level) {
         var path = level.ssTablePath(this.basePath);
 
         try {
@@ -100,46 +100,6 @@ public class CompationManager extends Thread {
         var directory = file.getParentFile();
         if (!directory.exists()) {
             directory.mkdirs();
-        }
-    }
-
-    enum Level {
-        LEVEL_1(1, 2),
-        LEVEL_2(2, 4),
-        LEVEL_3(3, 8),
-        LEVEL_4(4, 16),
-        LEVEL_5(5, 32),
-        LEVEL_6(6, 64);
-
-        private final int level;
-        private final int threshold;
-
-        Level(int level, int threshold) {
-            this.level = level;
-            this.threshold = threshold;
-        }
-
-        public static Level maxLevel() {
-            return LEVEL_6;
-        }
-
-        public int nextLevel() {
-            if (this == maxLevel()) {
-                return maxLevel().value();
-            }
-            return level + 1;
-        }
-
-        public int value() {
-            return level;
-        }
-
-        public String ssTablePath(String basePath) {
-            return String.format(basePath, level);
-        }
-
-        public boolean isCompactionRequired(long ssTableCount) {
-            return ssTableCount >= threshold;
         }
     }
 }

@@ -1,19 +1,14 @@
 package io.github.gunkim.engine.storage;
 
 import io.github.gunkim.engine.storage.exception.StorageReadException;
-import io.github.gunkim.engine.storage.exception.StorageWriteException;
-import io.github.gunkim.engine.storage.serializer.JsonSerializer;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Stream;
-
-import static io.github.gunkim.engine.storage.CompationManager.Level;
 
 /**
  * <p>LSM-Tree 개념 학습을 위해 구현하는 객체이기 때문에 동시성을 위한 동기화 로직은 고려하지 않는다.</p>
@@ -26,9 +21,10 @@ public class LsmTreeStorage<T> implements Storage<T> {
     private static final String SS_TABLE_FILE_BASE_NAME = "/sstable-%s";
 
     private final SortedMap<String, T> memTable = new TreeMap<>();
-    private final JsonSerializer jsonSerializer = new JsonSerializer();
     private final CompationManager compationManager;
     private final String storagePath;
+
+    private final FileSystemAccess<T> fileSystemAccess = new FileSystemAccess<>();
 
     public LsmTreeStorage(String path) {
         this.storagePath = path + ROOT_DIRECTORY_NAME;
@@ -51,15 +47,9 @@ public class LsmTreeStorage<T> implements Storage<T> {
                 .or(() -> searchInSSTable(key));
     }
 
-    /**
-     * SS-Table 내에 해당 키가 존재하는지 검색한다.
-     *
-     * @param key
-     * @return
-     */
     private Optional<T> searchInSSTable(String key) {
         try {
-            for (int level = 1; level <= Level.maxLevel().value(); level++) {
+            for (int level = 1; level <= CompationLevel.maxLevel().value(); level++) {
                 var results = searchKeyInLevelSSTables(level, key);
 
                 if (results.isPresent()) {
@@ -72,14 +62,6 @@ public class LsmTreeStorage<T> implements Storage<T> {
         return Optional.empty();
     }
 
-    /**
-     * <p>해당 레벨의 SS-Table 내에 해당 키가 존재하는지 검색한다.</p>
-     * <p>SS-Table들에서 Key가 중복될 가능성이 있으므로, 가장 최신의(시간 지역성) SS-Table을 우선적으로 검색한다.</p>
-     *
-     * @param level 해당 key를 검색하려는 ss-table 레벨
-     * @param key   찾고자 하는 value의 key값
-     * @return key의 해당하는 value
-     */
     private Optional<T> searchKeyInLevelSSTables(int level, String key) throws IOException {
         var levelPath = Path.of(this.storagePath + SS_TABLE_DIRECTORY_RELATIVE_PATH.formatted(level));
         List<File> sstables = getSSTables(levelPath);
@@ -89,7 +71,7 @@ public class LsmTreeStorage<T> implements Storage<T> {
         }
 
         for (var sstable : sstables) {
-            Optional<T> result = searchInFile(sstable, key);
+            Optional<T> result = fileSystemAccess.get(sstable, key);
             if (result.isPresent()) {
                 return result;
             }
@@ -97,40 +79,9 @@ public class LsmTreeStorage<T> implements Storage<T> {
         return Optional.empty();
     }
 
-    /**
-     * <p>SS-Table 내에 해당 키가 존재하는지 검색한다.</p>
-     * <p>단일 SS-Table 내의 Key값 Memtable(중복 없음)이 그대로 Flush되기 때문에 Key가 중복될 수 없다.</p>
-     *
-     * @param sstable 대상 SS-Table
-     * @param key     찾고자하는 Value의 Key
-     * @return 찾고자하는 Value
-     * @throws IOException
-     */
-    private Optional<T> searchInFile(File sstable, String key) throws IOException {
-        try (var fileReader = Files.newBufferedReader(sstable.toPath())) {
-            String line;
-            while ((line = fileReader.readLine()) != null) {
-                var seperator = line.indexOf(",");
-
-                String savedKey = line.substring(0, seperator);
-                if (savedKey.equals(key)) {
-                    return Optional.of(jsonSerializer.deserialize(line.substring(seperator + 1)));
-                }
-            }
-        }
-        return Optional.empty();
-    }
-
-    /**
-     * 해당 경로 내에 존재하는 모든 SS-Table을 가져온다.
-     *
-     * @param path
-     * @return
-     * @throws IOException
-     */
     private List<File> getSSTables(Path path) throws IOException {
-        if (!Files.exists(path)) {
-            return Collections.emptyList();
+        if (!fileSystemAccess.existsPath(path)) {
+            return List.of();
         }
         try (Stream<Path> paths = Files.list(path)) {
             return paths
@@ -143,34 +94,15 @@ public class LsmTreeStorage<T> implements Storage<T> {
 
     private void flush() {
         var ssTableFileName = SS_TABLE_FILE_BASE_NAME.formatted(generateIdentifier());
-        var file = new File(this.storagePath + SS_TABLE_DIRECTORY_RELATIVE_PATH.formatted(1) + ssTableFileName);
-        existsDirectory(file);
+        var newFile = new File(this.storagePath + SS_TABLE_DIRECTORY_RELATIVE_PATH.formatted(1) + ssTableFileName);
 
-        try (var fileWriter = new FileWriter(file, false)) {
-            for (var entry : memTable.entrySet()) {
-                String key = entry.getKey();
-                String value = jsonSerializer.serialize(entry.getValue());
-
-                var content = "%s,%s\n".formatted(key, value);
-                fileWriter.append(content);
-            }
-            fileWriter.flush();
-        } catch (IOException e) {
-            throw new StorageWriteException(e.getMessage());
-        }
+        fileSystemAccess.existsDirectory(newFile);
+        fileSystemAccess.flush(newFile, memTable);
         memTable.clear();
     }
 
-    private void existsDirectory(File file) {
-        var directory = file.getParentFile();
-        if (!directory.exists()) {
-            directory.mkdirs();
-        }
-    }
-
     private String generateIdentifier() {
-        var identifierFormat = new SimpleDateFormat("yyMMddHHmmssSSS");
-        return identifierFormat.format(new Date());
+        return new SimpleDateFormat("yyMMddHHmmssSSS").format(new Date());
     }
 
     private void runIfMemtableFull(Runnable runnable) {
