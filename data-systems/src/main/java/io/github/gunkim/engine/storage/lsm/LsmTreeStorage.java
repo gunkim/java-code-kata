@@ -36,7 +36,7 @@ public class LsmTreeStorage<T> implements Storage<T> {
     public void save(String key, T value) {
         runIfMemtableFull(() -> {
             flush();
-            compationManager.start();
+            compation();
         });
         memTable.put(key, value);
     }
@@ -110,5 +110,9 @@ public class LsmTreeStorage<T> implements Storage<T> {
         if (memTable.size() >= THRESHOLD) {
             runnable.run();
         }
+    }
+
+    private void compation() {
+        compationManager.start();
     }
 }
