@@ -1,4 +1,7 @@
-package io.github.gunkim.engine.storage;
+package io.github.gunkim.engine.storage.hash;
+
+import io.github.gunkim.engine.storage.Storage;
+import io.github.gunkim.engine.storage.StorageFactory;
 
 public class HashIndexStorageFactory<T> implements StorageFactory<T> {
     @Override

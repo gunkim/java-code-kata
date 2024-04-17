@@ -1,4 +1,4 @@
-package io.github.gunkim.engine.storage;
+package io.github.gunkim.engine.storage.hash;
 
 import io.github.gunkim.engine.storage.exception.BackupFailedException;
 

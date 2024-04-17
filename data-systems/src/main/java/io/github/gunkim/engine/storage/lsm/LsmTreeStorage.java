@@ -1,5 +1,6 @@
-package io.github.gunkim.engine.storage;
+package io.github.gunkim.engine.storage.lsm;
 
+import io.github.gunkim.engine.storage.Storage;
 import io.github.gunkim.engine.storage.exception.StorageReadException;
 
 import java.io.File;

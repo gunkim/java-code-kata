@@ -1,6 +1,6 @@
 package io.github.gunkim.engine;
 
-import io.github.gunkim.engine.storage.LsmTreeStorageFactory;
+import io.github.gunkim.engine.storage.lsm.LsmTreeStorageFactory;
 import io.github.gunkim.engine.storage.Storage;
 import io.github.gunkim.engine.storage.StorageFactory;
 
@@ -15,12 +15,12 @@ public class Main {
         StorageFactory<Map<String, Object>> storageFactory = new LsmTreeStorageFactory<>();
         Storage<Map<String, Object>> storage = storageFactory.createSimpleStorage(SAVE_PATH);
 
-//        IntStream.rangeClosed(1, 500).forEach(i -> {
-//            storage.save(String.valueOf(i), Map.of(
-//                    "name", "London",
-//                    "attractions", List.of("Big Ben", "London Eye3")
-//            ));
-//        });
+        IntStream.rangeClosed(1, 3500).forEach(i -> {
+            storage.save(String.valueOf(i), Map.of(
+                    "name", "London",
+                    "attractions", List.of("Big Ben", "London Eye3")
+            ));
+        });
 
         StopWatch.run(() -> {
             var data = storage.find("101");
