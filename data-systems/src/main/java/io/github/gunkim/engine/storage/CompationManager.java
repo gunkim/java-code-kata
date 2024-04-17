@@ -1,5 +1,7 @@
 package io.github.gunkim.engine.storage;
 
+import io.github.gunkim.engine.storage.exception.CompactionFailedException;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -14,9 +16,11 @@ import java.util.TreeMap;
 
 public class CompationManager extends Thread {
     private final String basePath;
+    private final String ssTableFileBaseName;
 
-    public CompationManager(String basePath) {
+    public CompationManager(String basePath, String ssTableFileBaseName) {
         this.basePath = basePath;
+        this.ssTableFileBaseName = ssTableFileBaseName;
     }
 
     @Override
@@ -34,7 +38,7 @@ public class CompationManager extends Thread {
         SortedMap<String, String> newSSTableCompatiningMap = new TreeMap<>();
         ssTables.forEach(ssTable -> compation(ssTable, newSSTableCompatiningMap));
 
-        var newSSTablePath = String.format(basePath + "/sstable-%s", level.nextLevel(), generateIdentifier());
+        var newSSTablePath = String.format(basePath + ssTableFileBaseName, level.nextLevel(), generateIdentifier());
 
         existsDirectory(new File(newSSTablePath));
         try (var fileWriter = new FileWriter(newSSTablePath)) {
@@ -43,8 +47,7 @@ public class CompationManager extends Thread {
             }
             fileWriter.flush();
         } catch (IOException e) {
-            //TODO 더 적절한 예외를 던지는게 좋을 것 같음.
-            throw new RuntimeException(e);
+            throw new CompactionFailedException("level-%d 컴팩션에 실패했습니다.".formatted(level.value()), e);
         }
 
         ssTables.forEach(File::delete);
@@ -67,8 +70,7 @@ public class CompationManager extends Thread {
                 newSSTableCompatiningMap.put(key, value);
             }
         } catch (IOException e) {
-            //TODO 더 적절한 예외를 던지는게 좋을 것 같음.
-            throw new RuntimeException(e);
+            throw new CompactionFailedException("%s SS-Table을 읽어오는 과정에서 문제가 발생했습니다.".formatted(ssTable.getName()), e);
         }
     }
 
@@ -122,9 +124,8 @@ public class CompationManager extends Thread {
         }
 
         public int nextLevel() {
-            if (level == 6) {
-                //TODO 더 적절한 예외를 던지는게 좋을 것 같음.
-                throw new RuntimeException("최대 레벨입니다.");
+            if (this == maxLevel()) {
+                return maxLevel().value();
             }
             return level + 1;
         }

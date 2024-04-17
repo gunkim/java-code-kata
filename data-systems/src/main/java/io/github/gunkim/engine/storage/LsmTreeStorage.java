@@ -23,7 +23,7 @@ public class LsmTreeStorage<T> implements Storage<T> {
 
     private static final String ROOT_DIRECTORY_NAME = "/lsm-tree";
     private static final String SS_TABLE_DIRECTORY_RELATIVE_PATH = "/sstable/data/level-%d";
-    private static final String SS_TABLE_FILE_NAME = "/sstable-%s";
+    private static final String SS_TABLE_FILE_BASE_NAME = "/sstable-%s";
 
     private final SortedMap<String, T> memTable = new TreeMap<>();
     private final JsonSerializer jsonSerializer = new JsonSerializer();
@@ -32,7 +32,7 @@ public class LsmTreeStorage<T> implements Storage<T> {
 
     public LsmTreeStorage(String path) {
         this.storagePath = path + ROOT_DIRECTORY_NAME;
-        this.compationManager = new CompationManager(this.storagePath + SS_TABLE_DIRECTORY_RELATIVE_PATH);
+        this.compationManager = new CompationManager(this.storagePath + SS_TABLE_DIRECTORY_RELATIVE_PATH, SS_TABLE_FILE_BASE_NAME);
     }
 
     @Override
@@ -142,7 +142,7 @@ public class LsmTreeStorage<T> implements Storage<T> {
     }
 
     private void flush() {
-        var ssTableFileName = SS_TABLE_FILE_NAME.formatted(generateIdentifier());
+        var ssTableFileName = SS_TABLE_FILE_BASE_NAME.formatted(generateIdentifier());
         var file = new File(this.storagePath + SS_TABLE_DIRECTORY_RELATIVE_PATH.formatted(1) + ssTableFileName);
         existsDirectory(file);
 
