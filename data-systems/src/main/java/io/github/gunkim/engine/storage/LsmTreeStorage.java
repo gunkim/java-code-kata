@@ -3,47 +3,43 @@ package io.github.gunkim.engine.storage;
 import io.github.gunkim.engine.storage.exception.StorageReadException;
 import io.github.gunkim.engine.storage.exception.StorageWriteException;
 import io.github.gunkim.engine.storage.serializer.JsonSerializer;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.text.SimpleDateFormat;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-import java.util.SortedMap;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.stream.Stream;
+
+import static io.github.gunkim.engine.storage.CompationManager.Level;
 
 /**
  * <p>LSM-Tree 개념 학습을 위해 구현하는 객체이기 때문에 동시성을 위한 동기화 로직은 고려하지 않는다.</p>
  */
 public class LsmTreeStorage<T> implements Storage<T> {
-
-    private static final CompationManager COMPATION_MANAGER = new CompationManager();
-
-    private static final int MAX_LEVEL = 6;
     private static final int THRESHOLD = 5;
 
-    private static final String SS_TABLE_DIRECTORY_NAME = "/sstable";
-    private static final String SS_TABLE_FILE_NAME = SS_TABLE_DIRECTORY_NAME + "/data/level-%d/sstable-%s";
+    private static final String ROOT_DIRECTORY_NAME = "/lsm-tree";
+    private static final String SS_TABLE_DIRECTORY_RELATIVE_PATH = "/sstable/data/level-%d";
+    private static final String SS_TABLE_FILE_NAME = "/sstable-%s";
 
     private final SortedMap<String, T> memTable = new TreeMap<>();
     private final JsonSerializer jsonSerializer = new JsonSerializer();
-    private final String path;
+    private final CompationManager compationManager;
+    private final String storagePath;
 
     public LsmTreeStorage(String path) {
-        this.path = "%s/%s".formatted(path, "lsm-tree");
+        this.storagePath = path + ROOT_DIRECTORY_NAME;
+        this.compationManager = new CompationManager(this.storagePath + SS_TABLE_DIRECTORY_RELATIVE_PATH);
     }
 
     @Override
     public void save(String key, T value) {
         runIfMemtableFull(() -> {
             flush();
-            COMPATION_MANAGER.start();
+            compationManager.start();
         });
         memTable.put(key, value);
     }
@@ -63,7 +59,7 @@ public class LsmTreeStorage<T> implements Storage<T> {
      */
     private Optional<T> searchInSSTable(String key) {
         try {
-            for (int level = 1; level <= MAX_LEVEL; level++) {
+            for (int level = 1; level <= Level.maxLevel().value(); level++) {
                 var results = searchKeyInLevelSSTables(level, key);
 
                 if (results.isPresent()) {
@@ -85,9 +81,7 @@ public class LsmTreeStorage<T> implements Storage<T> {
      * @return key의 해당하는 value
      */
     private Optional<T> searchKeyInLevelSSTables(int level, String key) throws IOException {
-        //TODO: 해당 경로 값을 상수로 빼야 함.
-        var levelPath = Path.of(this.path + "/sstable/data/level-%d".formatted(level));
-
+        var levelPath = Path.of(this.storagePath + SS_TABLE_DIRECTORY_RELATIVE_PATH.formatted(level));
         List<File> sstables = getSSTables(levelPath);
 
         if (sstables.isEmpty()) {
@@ -148,7 +142,8 @@ public class LsmTreeStorage<T> implements Storage<T> {
     }
 
     private void flush() {
-        var file = new File(path + SS_TABLE_FILE_NAME.formatted(1, generateIdentifier()));
+        var ssTableFileName = SS_TABLE_FILE_NAME.formatted(generateIdentifier());
+        var file = new File(this.storagePath + SS_TABLE_DIRECTORY_RELATIVE_PATH.formatted(1) + ssTableFileName);
         existsDirectory(file);
 
         try (var fileWriter = new FileWriter(file, false)) {

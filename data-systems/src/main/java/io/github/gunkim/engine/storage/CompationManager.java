@@ -13,9 +13,11 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 
 public class CompationManager extends Thread {
+    private final String basePath;
 
-    //TODO: 환경변수 값으로 받을 수 있어야 함.
-    private final String path = "./lsm-tree/sstable/data/level-%d";
+    public CompationManager(String basePath) {
+        this.basePath = basePath;
+    }
 
     @Override
     public void start() {
@@ -32,7 +34,7 @@ public class CompationManager extends Thread {
         SortedMap<String, String> newSSTableCompatiningMap = new TreeMap<>();
         ssTables.forEach(ssTable -> compation(ssTable, newSSTableCompatiningMap));
 
-        var newSSTablePath = String.format(path + "/sstable-%s", level.nextLevel(), generateIdentifier());
+        var newSSTablePath = String.format(basePath + "/sstable-%s", level.nextLevel(), generateIdentifier());
 
         existsDirectory(new File(newSSTablePath));
         try (var fileWriter = new FileWriter(newSSTablePath)) {
@@ -78,7 +80,7 @@ public class CompationManager extends Thread {
     }
 
     private List<File> ssTables(Level level) {
-        var path = level.ssTablePath(this.path);
+        var path = level.ssTablePath(this.basePath);
 
         try {
             var files = Files.list(Path.of(path));
@@ -108,7 +110,6 @@ public class CompationManager extends Thread {
         LEVEL_6(6, 64);
 
         private final int level;
-        //SS-Table의 갯수가 threshold를 넘어가면 컴팩션을 수행함.
         private final int threshold;
 
         Level(int level, int threshold) {
@@ -116,8 +117,8 @@ public class CompationManager extends Thread {
             this.threshold = threshold;
         }
 
-        public int level() {
-            return level;
+        public static Level maxLevel() {
+            return LEVEL_6;
         }
 
         public int nextLevel() {
@@ -128,8 +129,8 @@ public class CompationManager extends Thread {
             return level + 1;
         }
 
-        public int threshold() {
-            return threshold;
+        public int value() {
+            return level;
         }
 
         public String ssTablePath(String basePath) {
