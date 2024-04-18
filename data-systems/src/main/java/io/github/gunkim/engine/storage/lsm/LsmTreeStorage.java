@@ -60,7 +60,7 @@ public class LsmTreeStorage<T> implements Storage<T> {
     }
 
     private Optional<T> searchKeyInLevelSSTables(int level, String key) {
-        var levelPath = Path.of(this.storagePath + SS_TABLE_DIRECTORY_RELATIVE_PATH.formatted(level));
+        var levelPath = Path.of(createDirectoryPath(level));
         List<File> sstables = getSSTables(levelPath);
 
         if (sstables.isEmpty()) {
@@ -91,7 +91,7 @@ public class LsmTreeStorage<T> implements Storage<T> {
 
     private void flush() {
         var ssTableFileName = SS_TABLE_FILE_BASE_NAME.formatted(generateIdentifier());
-        var newSSTableSavePath = this.storagePath + SS_TABLE_DIRECTORY_RELATIVE_PATH.formatted(1) + ssTableFileName;
+        var newSSTableSavePath = createFilePath(CompationLevel.LEVEL_1.value(), ssTableFileName);
 
         fileSystemAccess.flush(newSSTableSavePath, memTable);
         memTable.clear();
@@ -109,5 +109,13 @@ public class LsmTreeStorage<T> implements Storage<T> {
 
     private void compation() {
         compationManager.start();
+    }
+
+    private String createFilePath(int level, String fileName) {
+        return createDirectoryPath(level) + SS_TABLE_FILE_BASE_NAME.formatted(fileName);
+    }
+
+    private String createDirectoryPath(int level) {
+        return this.storagePath + SS_TABLE_DIRECTORY_RELATIVE_PATH.formatted(level);
     }
 }

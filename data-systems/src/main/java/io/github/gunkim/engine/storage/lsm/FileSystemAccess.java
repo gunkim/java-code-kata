@@ -44,8 +44,8 @@ public class FileSystemAccess<T> {
         }
     }
 
-    public void flush(String newFileName, MemTable<T> memTable) {
-        var newFile = new File(newFileName);
+    public void flush(String newFileSavePath, MemTable<T> memTable) {
+        var newFile = new File(newFileSavePath);
         existsDirectory(newFile);
 
         try (var fileWriter = new FileWriter(newFile, false)) {
