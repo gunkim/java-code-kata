@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Optional;
-import java.util.SortedMap;
 import java.util.stream.Stream;
 
 public class FileSystemAccess<T> {
@@ -45,12 +44,12 @@ public class FileSystemAccess<T> {
         }
     }
 
-    public void flush(String newFileName, SortedMap<String, T> datas) {
+    public void flush(String newFileName, MemTable<T> memTable) {
         var newFile = new File(newFileName);
         existsDirectory(newFile);
 
         try (var fileWriter = new FileWriter(newFile, false)) {
-            for (var entry : datas.entrySet()) {
+            for (var entry : memTable.entrySet()) {
                 String key = entry.getKey();
                 String value = jsonSerializer.serialize(entry.getValue());
 
