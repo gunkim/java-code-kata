@@ -1,11 +1,8 @@
 package io.github.gunkim.engine.storage.lsm;
 
 import io.github.gunkim.engine.storage.Storage;
-import io.github.gunkim.engine.storage.exception.StorageReadException;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -49,21 +46,17 @@ public class LsmTreeStorage<T> implements Storage<T> {
     }
 
     private Optional<T> searchInSSTable(String key) {
-        try {
-            for (int level = 1; level <= CompationLevel.maxLevel().value(); level++) {
-                var results = searchKeyInLevelSSTables(level, key);
+        for (int level = 1; level <= CompationLevel.maxLevel().value(); level++) {
+            var results = searchKeyInLevelSSTables(level, key);
 
-                if (results.isPresent()) {
-                    return results;
-                }
+            if (results.isPresent()) {
+                return results;
             }
-        } catch (IOException e) {
-            throw new StorageReadException(e.getMessage());
         }
         return Optional.empty();
     }
 
-    private Optional<T> searchKeyInLevelSSTables(int level, String key) throws IOException {
+    private Optional<T> searchKeyInLevelSSTables(int level, String key) {
         var levelPath = Path.of(this.storagePath + SS_TABLE_DIRECTORY_RELATIVE_PATH.formatted(level));
         List<File> sstables = getSSTables(levelPath);
 
@@ -80,11 +73,11 @@ public class LsmTreeStorage<T> implements Storage<T> {
         return Optional.empty();
     }
 
-    private List<File> getSSTables(Path path) throws IOException {
+    private List<File> getSSTables(Path path) {
         if (!fileSystemAccess.existsPath(path)) {
             return List.of();
         }
-        try (Stream<Path> paths = Files.list(path)) {
+        try (Stream<Path> paths = fileSystemAccess.getDirectoryInFilePaths(path)) {
             return paths
                     .sorted(Comparator.reverseOrder())
                     .map(Path::toFile)
@@ -95,10 +88,9 @@ public class LsmTreeStorage<T> implements Storage<T> {
 
     private void flush() {
         var ssTableFileName = SS_TABLE_FILE_BASE_NAME.formatted(generateIdentifier());
-        var newFile = new File(this.storagePath + SS_TABLE_DIRECTORY_RELATIVE_PATH.formatted(1) + ssTableFileName);
+        var newSSTableSavePath = this.storagePath + SS_TABLE_DIRECTORY_RELATIVE_PATH.formatted(1) + ssTableFileName;
 
-        fileSystemAccess.existsDirectory(newFile);
-        fileSystemAccess.flush(newFile, memTable);
+        fileSystemAccess.flush(newSSTableSavePath, memTable);
         memTable.clear();
     }
 
