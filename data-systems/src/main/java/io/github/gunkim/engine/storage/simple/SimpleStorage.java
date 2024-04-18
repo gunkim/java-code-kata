@@ -39,7 +39,7 @@ public class SimpleStorage<T> implements Storage<T> {
             writer.append(content);
             writer.flush();
         } catch (IOException e) {
-            throw new StorageWriteException(e.getMessage());
+            throw new StorageWriteException(e.getMessage(), e);
         }
     }
 

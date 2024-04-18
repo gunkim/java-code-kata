@@ -9,6 +9,8 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.stream.Stream;
 
 /**
@@ -21,15 +23,17 @@ public class LsmTreeStorage<T> implements Storage<T> {
     private static final String SS_TABLE_DIRECTORY_RELATIVE_PATH = "/sstable/data/level-%d";
     private static final String SS_TABLE_FILE_BASE_NAME = "/sstable-%s";
 
+    private static final ExecutorService executors = Executors.newFixedThreadPool(5);
+
     private final MemTable<T> memTable = new MemTable<>(THRESHOLD);
-    private final CompationManager compationManager;
+    private final Compation compation;
     private final String storagePath;
 
     private final FileSystemAccess<T> fileSystemAccess = new FileSystemAccess<>();
 
     public LsmTreeStorage(String path) {
         this.storagePath = path + ROOT_DIRECTORY_NAME;
-        this.compationManager = new CompationManager(this.storagePath + SS_TABLE_DIRECTORY_RELATIVE_PATH, SS_TABLE_FILE_BASE_NAME);
+        this.compation = new Compation(this.storagePath + SS_TABLE_DIRECTORY_RELATIVE_PATH, SS_TABLE_FILE_BASE_NAME);
     }
 
     @Override
@@ -77,9 +81,6 @@ public class LsmTreeStorage<T> implements Storage<T> {
     }
 
     private List<File> getSSTables(Path path) {
-        if (!fileSystemAccess.existsPath(path)) {
-            return List.of();
-        }
         try (Stream<Path> paths = fileSystemAccess.getDirectoryInFilePaths(path)) {
             return paths
                     .sorted(Comparator.reverseOrder())
@@ -108,7 +109,7 @@ public class LsmTreeStorage<T> implements Storage<T> {
     }
 
     private void compation() {
-        compationManager.start();
+        executors.execute(compation::start);
     }
 
     private String createFilePath(int level, String fileName) {

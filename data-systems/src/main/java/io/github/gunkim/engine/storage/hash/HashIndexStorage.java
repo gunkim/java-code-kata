@@ -61,7 +61,7 @@ public class HashIndexStorage<T> implements Storage<T> {
             writer.flush();
             cache.put(key, startPosition);
         } catch (IOException e) {
-            throw new StorageWriteException(e.getMessage());
+            throw new StorageWriteException(e.getMessage(), e);
         }
     }
 

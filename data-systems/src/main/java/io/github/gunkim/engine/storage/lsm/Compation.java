@@ -14,21 +14,21 @@ import java.util.Map.Entry;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-public class CompationManager extends Thread {
+public class Compation {
     private final String basePath;
     private final String ssTableFileBaseName;
 
-    public CompationManager(String basePath, String ssTableFileBaseName) {
+    public Compation(String basePath, String ssTableFileBaseName) {
         this.basePath = basePath;
         this.ssTableFileBaseName = ssTableFileBaseName;
     }
 
-    @Override
     public void start() {
         for (CompationLevel level : CompationLevel.values()) {
-            if (isCompactionRequired(level)) {
-                compation(level);
+            if (!isCompactionRequired(level)) {
+                return;
             }
+            compation(level);
         }
     }
 
@@ -38,7 +38,7 @@ public class CompationManager extends Thread {
         SortedMap<String, String> newSSTableCompatiningMap = new TreeMap<>();
         ssTables.forEach(ssTable -> compation(ssTable, newSSTableCompatiningMap));
 
-        var newSSTablePath = String.format(basePath + ssTableFileBaseName, level.nextLevel(), generateIdentifier());
+        var newSSTablePath = String.format(basePath.formatted(level.value()) + ssTableFileBaseName, level.nextLevel(), generateIdentifier());
 
         existsDirectory(new File(newSSTablePath));
         try (var fileWriter = new FileWriter(newSSTablePath)) {
