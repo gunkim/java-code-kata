@@ -2,9 +2,11 @@ package io.github.gunkim.domain.car.vo
 
 import io.kotest.assertions.throwables.shouldNotThrowAny
 import io.kotest.assertions.throwables.shouldThrow
+import io.kotest.core.annotation.DisplayName
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
+@DisplayName("경기장은")
 class LabTests : StringSpec({
     "인스턴스가 생성된다" {
         shouldNotThrowAny { Lab(1) }
