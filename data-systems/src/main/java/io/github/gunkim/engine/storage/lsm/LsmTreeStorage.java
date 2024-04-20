@@ -67,10 +67,6 @@ public class LsmTreeStorage<T> implements Storage<T> {
         var levelPath = Path.of(createDirectoryPath(level));
         List<File> sstables = getSSTables(levelPath);
 
-        if (sstables.isEmpty()) {
-            return Optional.empty();
-        }
-
         for (var sstable : sstables) {
             Optional<T> result = fileSystemAccess.get(sstable, key);
             if (result.isPresent()) {
