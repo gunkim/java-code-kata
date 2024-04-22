@@ -1,6 +1,8 @@
 package io.github.gunkim.engine.storage.lsm;
 
 import io.github.gunkim.engine.storage.Storage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -17,18 +19,20 @@ import java.util.stream.Stream;
  * <p>LSM-Tree 개념 학습을 위해 구현하는 객체이기 때문에 동시성을 위한 동기화 로직은 고려하지 않는다.</p>
  */
 public class LsmTreeStorage<T> implements Storage<T> {
-    private static final int THRESHOLD = 5;
+    private static final Logger LOGGER = LoggerFactory.getLogger(LsmTreeStorage.class);
 
-    private static final String ROOT_DIRECTORY_NAME = "/lsm-tree";
+    private static final int MEMTABLE_THRESHOLD = 5;
+
+    private static final String ROOT_DIRECTORY_NAME = "lsm-tree";
     private static final String SS_TABLE_DIRECTORY_RELATIVE_PATH = "/sstable/data/level-%d";
     private static final String SS_TABLE_FILE_BASE_NAME = "/sstable-%s";
 
-    private static final ExecutorService executors = Executors.newFixedThreadPool(5);
+    private static final ExecutorService executors = Executors.newSingleThreadExecutor();
 
-    private final MemTable<T> memTable = new MemTable<>(THRESHOLD);
-    private final Compation compation;
     private final String storagePath;
 
+    private final MemTable<T> memTable = new MemTable<>(MEMTABLE_THRESHOLD);
+    private final Compation compation;
     private final FileSystemAccess<T> fileSystemAccess = new FileSystemAccess<>();
 
     public LsmTreeStorage(String path) {
@@ -39,6 +43,7 @@ public class LsmTreeStorage<T> implements Storage<T> {
     @Override
     public void save(String key, T value) {
         runIfMemtableFull(() -> {
+            LOGGER.info("Memtable 가득참");
             flush();
             compation();
         });
@@ -49,12 +54,15 @@ public class LsmTreeStorage<T> implements Storage<T> {
     @Override
     public Optional<T> find(String key) {
         return Optional.ofNullable(memTable.get(key))
-                .or(() -> searchInSSTable(key));
+                .or(() -> {
+                    LOGGER.info("Memtable에 해당 key(%S)가 존재하지 않아 SS-Table 탐색".formatted(key));
+                    return searchInSSTable(key);
+                });
     }
 
     private Optional<T> searchInSSTable(String key) {
         for (int level = 1; level <= CompationLevel.maxLevel().value(); level++) {
-            var results = searchKeyInLevelSSTables(level, key);
+            var results = searchKeyInLevelSSTables(CompationLevel.valueOf(level), key);
 
             if (results.isPresent()) {
                 return results;
@@ -63,7 +71,7 @@ public class LsmTreeStorage<T> implements Storage<T> {
         return Optional.empty();
     }
 
-    private Optional<T> searchKeyInLevelSSTables(int level, String key) {
+    private Optional<T> searchKeyInLevelSSTables(CompationLevel level, String key) {
         var levelPath = Path.of(createDirectoryPath(level));
         List<File> sstables = getSSTables(levelPath);
 
@@ -87,11 +95,13 @@ public class LsmTreeStorage<T> implements Storage<T> {
     }
 
     private void flush() {
+        LOGGER.info("Memtable 디스크 플러쉬 시작");
         var ssTableFileName = SS_TABLE_FILE_BASE_NAME.formatted(generateIdentifier());
-        var newSSTableSavePath = createFilePath(CompationLevel.LEVEL_1.value(), ssTableFileName);
+        var newSSTableSavePath = createLevel1SSTableFilePath(ssTableFileName);
 
         fileSystemAccess.flush(newSSTableSavePath, memTable);
         memTable.clear();
+        LOGGER.info("Memtable 디스크 플러쉬 완료");
     }
 
     private String generateIdentifier() {
@@ -108,11 +118,11 @@ public class LsmTreeStorage<T> implements Storage<T> {
         executors.execute(compation::start);
     }
 
-    private String createFilePath(int level, String fileName) {
-        return createDirectoryPath(level) + SS_TABLE_FILE_BASE_NAME.formatted(fileName);
+    private String createLevel1SSTableFilePath(String fileName) {
+        return createDirectoryPath(CompationLevel.LEVEL_1) + fileName;
     }
 
-    private String createDirectoryPath(int level) {
-        return this.storagePath + SS_TABLE_DIRECTORY_RELATIVE_PATH.formatted(level);
+    private String createDirectoryPath(CompationLevel level) {
+        return this.storagePath + SS_TABLE_DIRECTORY_RELATIVE_PATH.formatted(level.value());
     }
 }

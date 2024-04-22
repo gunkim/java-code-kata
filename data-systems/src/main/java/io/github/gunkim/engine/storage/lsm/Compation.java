@@ -1,6 +1,8 @@
 package io.github.gunkim.engine.storage.lsm;
 
 import io.github.gunkim.engine.storage.exception.CompactionFailedException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -15,6 +17,8 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 
 public class Compation {
+    private static final Logger LOGGER = LoggerFactory.getLogger(Compation.class);
+
     private final String basePath;
     private final String ssTableFileBaseName;
 
@@ -28,7 +32,9 @@ public class Compation {
             if (!isCompactionRequired(level)) {
                 return;
             }
+            LOGGER.info("Level-%d의 컴팩션 시작".formatted(level.value()));
             compation(level);
+            LOGGER.info("Level-%d의 컴팩션 완료".formatted(level.value()));
         }
     }
 
@@ -38,7 +44,10 @@ public class Compation {
         SortedMap<String, String> newSSTableCompatiningMap = new TreeMap<>();
         ssTables.forEach(ssTable -> compation(ssTable, newSSTableCompatiningMap));
 
-        var newSSTablePath = String.format(basePath.formatted(level.value()) + ssTableFileBaseName, level.nextLevel(), generateIdentifier());
+        var newSSTablePath = String.format(
+                basePath + ssTableFileBaseName,
+                level.nextLevel(), generateIdentifier()
+        );
 
         existsDirectory(new File(newSSTablePath));
         try (var fileWriter = new FileWriter(newSSTablePath)) {
@@ -50,6 +59,8 @@ public class Compation {
             throw new CompactionFailedException("level-%d 컴팩션에 실패했습니다.".formatted(level.value()), e);
         }
 
+        //TODO: 병합이 완료된 SS-Table을 바로 삭제할 경우 이를 참조하는 다른 스레드에서 해당 파일에 접근할 경우 NoSuchFileException 예외를 발생시킬 수 있다.
+        //TODO: 우선 삭제가 아니라 마킹을 해둔 후 별도의 스레드를 스케줄링하여 삭제하는게 더 안전할 수 있다.
         ssTables.forEach(File::delete);
     }
 
@@ -73,7 +84,6 @@ public class Compation {
             throw new CompactionFailedException("%s SS-Table을 읽어오는 과정에서 문제가 발생했습니다.".formatted(ssTable.getName()), e);
         }
     }
-
 
     private boolean isCompactionRequired(CompationLevel level) {
         var ssTableCount = ssTables(level).size();

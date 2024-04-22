@@ -1,5 +1,7 @@
 package io.github.gunkim.engine.storage.lsm;
 
+import java.util.Arrays;
+
 enum CompationLevel {
     LEVEL_1(1, 2),
     LEVEL_2(2, 4),
@@ -14,6 +16,13 @@ enum CompationLevel {
     CompationLevel(int level, int threshold) {
         this.level = level;
         this.threshold = threshold;
+    }
+
+    public static CompationLevel valueOf(int levelValue) {
+        return Arrays.stream(values())
+                .filter(level -> level.value() == levelValue)
+                .findAny()
+                .orElseThrow();
     }
 
     public static CompationLevel maxLevel() {
