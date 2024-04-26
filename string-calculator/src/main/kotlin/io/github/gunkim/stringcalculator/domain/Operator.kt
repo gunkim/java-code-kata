@@ -1,4 +1,4 @@
-package io.github.gunkim.domain
+package io.github.gunkim.stringcalculator.domain
 
 enum class Operator(
     private val operator: String,

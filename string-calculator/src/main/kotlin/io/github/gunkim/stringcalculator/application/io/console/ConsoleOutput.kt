@@ -1,6 +1,6 @@
-package io.github.gunkim.application.io.console
+package io.github.gunkim.stringcalculator.application.io.console
 
-import io.github.gunkim.application.io.Output
+import io.github.gunkim.stringcalculator.application.io.Output
 
 class ConsoleOutput : Output {
     override fun inputMessage() {

@@ -1,4 +1,4 @@
-package io.github.gunkim.domain
+package io.github.gunkim.stringcalculator.domain
 
 class Expression private constructor(
     private val numbers: ArrayDeque<Int>,

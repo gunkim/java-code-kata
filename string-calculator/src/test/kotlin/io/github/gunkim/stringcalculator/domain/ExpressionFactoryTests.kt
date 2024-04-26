@@ -1,4 +1,4 @@
-package io.github.gunkim.domain
+package io.github.gunkim.stringcalculator.domain
 
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.annotation.DisplayName

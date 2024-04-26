@@ -1,6 +1,6 @@
-package io.github.gunkim.application.io.console
+package io.github.gunkim.stringcalculator.application.io.console
 
-import io.github.gunkim.application.io.Input
+import io.github.gunkim.stringcalculator.application.io.Input
 
 class ConsoleInput : Input {
     override fun read(): String = readlnOrNull()

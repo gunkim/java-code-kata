@@ -1,8 +1,8 @@
-package io.github.gunkim
+package io.github.gunkim.stringcalculator.application
 
-import io.github.gunkim.application.io.Input
-import io.github.gunkim.application.io.Output
-import io.github.gunkim.domain.ExpressionFactory
+import io.github.gunkim.stringcalculator.application.io.Input
+import io.github.gunkim.stringcalculator.application.io.Output
+import io.github.gunkim.stringcalculator.domain.ExpressionFactory
 
 class Calculator(
     private val input: Input,

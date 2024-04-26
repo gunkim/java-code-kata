@@ -3,6 +3,7 @@ package io.github.gunkim.engine;
 import io.github.gunkim.engine.storage.lsm.LsmTreeStorageFactory;
 import io.github.gunkim.engine.storage.Storage;
 import io.github.gunkim.engine.storage.StorageFactory;
+import org.apache.log4j.BasicConfigurator;
 
 import java.util.List;
 import java.util.Map;

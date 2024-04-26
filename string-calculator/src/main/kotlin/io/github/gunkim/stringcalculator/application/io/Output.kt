@@ -1,4 +1,4 @@
-package io.github.gunkim.application.io
+package io.github.gunkim.stringcalculator.application.io
 
 interface Output {
     fun inputMessage()
