@@ -1,5 +1,6 @@
-package io.github.gunkim.domain
+package io.github.gunkim.lotto.domain
 
+import io.github.gunkim.lotto.domain.LottoNumber
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.annotation.DisplayName
 import io.kotest.core.spec.style.StringSpec

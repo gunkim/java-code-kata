@@ -1,4 +1,4 @@
-package io.github.gunkim.domain
+package io.github.gunkim.lotto.domain
 
 fun interface CreateNumberPolicy {
     fun create(): Int

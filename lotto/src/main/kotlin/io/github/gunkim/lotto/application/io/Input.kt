@@ -1,4 +1,4 @@
-package io.github.gunkim.application.io
+package io.github.gunkim.lotto.application.io
 
 interface Input {
     val money: Int

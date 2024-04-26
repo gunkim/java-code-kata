@@ -1,6 +1,6 @@
-package io.github.gunkim.application.io.console
+package io.github.gunkim.lotto.application.io.console
 
-import io.github.gunkim.application.io.Input
+import io.github.gunkim.lotto.application.io.Input
 
 class ConsoleInput : Input {
     override val money

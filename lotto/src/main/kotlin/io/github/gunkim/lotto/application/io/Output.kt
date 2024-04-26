@@ -1,7 +1,7 @@
-package io.github.gunkim.application.io
+package io.github.gunkim.lotto.application.io
 
-import io.github.gunkim.domain.Lotto
-import io.github.gunkim.domain.Rank
+import io.github.gunkim.lotto.domain.Lotto
+import io.github.gunkim.lotto.domain.Rank
 
 interface Output {
     fun buyMoneyInputMessage()

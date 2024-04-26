@@ -1,9 +1,9 @@
-package io.github.gunkim.application.io.console
+package io.github.gunkim.lotto.application.io.console
 
-import io.github.gunkim.application.io.Output
-import io.github.gunkim.domain.Lotto
-import io.github.gunkim.domain.LottoNumber
-import io.github.gunkim.domain.Rank
+import io.github.gunkim.lotto.application.io.Output
+import io.github.gunkim.lotto.domain.Lotto
+import io.github.gunkim.lotto.domain.LottoNumber
+import io.github.gunkim.lotto.domain.Rank
 
 class ConsoleOutput : Output {
     override fun buyMoneyInputMessage() {

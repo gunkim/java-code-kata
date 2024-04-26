@@ -1,5 +1,6 @@
-package io.github.gunkim.domain
+package io.github.gunkim.lotto.domain
 
+import io.github.gunkim.lotto.domain.Rank
 import io.kotest.core.annotation.DisplayName
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe

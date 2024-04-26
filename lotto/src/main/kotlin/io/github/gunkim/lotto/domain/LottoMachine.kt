@@ -1,6 +1,6 @@
-package io.github.gunkim.domain
+package io.github.gunkim.lotto.domain
 
-import io.github.gunkim.domain.Lotto.Companion.NUMBER_SIZE
+import io.github.gunkim.lotto.domain.Lotto.Companion.NUMBER_SIZE
 
 data class LottoMachine(
     private val factory: CreateNumberPolicy

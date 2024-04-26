@@ -1,4 +1,4 @@
-package io.github.gunkim.domain
+package io.github.gunkim.lotto.domain
 
 enum class Rank(
     val reward: Int,
