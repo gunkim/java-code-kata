@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.SortedMap;
 import java.util.TreeMap;
+import java.util.stream.Stream;
 
 public class Compation {
     private static final Logger LOGGER = LoggerFactory.getLogger(Compation.class);
@@ -93,9 +94,7 @@ public class Compation {
 
     private List<File> ssTables(CompationLevel level) {
         var path = level.ssTablePath(this.basePath);
-
-        try {
-            var files = Files.list(Path.of(path));
+        try (Stream<Path> files = Files.list(Path.of(path))) {
             return files
                     .sorted()
                     .filter(Files::isRegularFile)
