@@ -1,7 +1,5 @@
 package io.github.gunkim.hangman.domain
 
-import io.github.gunkim.hangman.domain.Letter
-import io.github.gunkim.hangman.domain.Word
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.DisplayName
 import io.kotest.core.spec.style.StringSpec

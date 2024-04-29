@@ -1,6 +1,5 @@
 package io.github.gunkim.carracing.domain.car
 
-import io.github.gunkim.carracing.domain.car.Car
 import io.github.gunkim.carracing.domain.car.vo.Name
 import io.github.gunkim.carracing.domain.car.vo.Position
 import io.kotest.assertions.throwables.shouldThrow

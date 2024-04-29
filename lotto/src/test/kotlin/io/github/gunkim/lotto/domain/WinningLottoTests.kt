@@ -1,8 +1,5 @@
 package io.github.gunkim.lotto.domain
 
-import io.github.gunkim.lotto.domain.Lotto
-import io.github.gunkim.lotto.domain.LottoNumber
-import io.github.gunkim.lotto.domain.WinningLotto
 import io.kotest.core.annotation.DisplayName
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe

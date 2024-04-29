@@ -4,7 +4,6 @@ import io.github.gunkim.carracing.domain.car.Car
 import io.github.gunkim.carracing.domain.car.Cars
 import io.github.gunkim.carracing.domain.car.vo.Name
 import io.github.gunkim.carracing.domain.car.vo.Position
-import io.github.gunkim.carracing.domain.policy.MaxScoreWinnerPolicy
 import io.kotest.core.annotation.DisplayName
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe

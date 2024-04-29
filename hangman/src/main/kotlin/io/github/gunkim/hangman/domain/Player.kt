@@ -11,8 +11,10 @@ data class Player(
 
     fun hit(letter: Letter): Player {
         val index = problem.indexOf(letter)
-        return if (index != -1)
+        return if (index != -1) {
             copy(letters = letters + (index to letter))
-        else this
+        } else {
+            this
+        }
     }
 }
