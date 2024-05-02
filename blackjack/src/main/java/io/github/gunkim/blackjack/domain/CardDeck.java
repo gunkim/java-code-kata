@@ -1,6 +1,7 @@
 package io.github.gunkim.blackjack.domain;
 
 import java.util.*;
+import java.util.stream.IntStream;
 
 public class CardDeck {
     private static final int DEFAULT_CARD_SIZE = 52;
@@ -24,6 +25,12 @@ public class CardDeck {
             throw new IllegalStateException("No more cards in the deck");
         }
         return cards.remove();
+    }
+
+    public List<Card> draw(int quantity) {
+        return IntStream.range(0, quantity)
+                .mapToObj(__ -> draw())
+                .toList();
     }
 
     private void validateCards(Collection<Card> cards) {
