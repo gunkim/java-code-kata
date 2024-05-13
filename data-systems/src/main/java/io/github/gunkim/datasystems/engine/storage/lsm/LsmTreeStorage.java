@@ -54,13 +54,11 @@ public class LsmTreeStorage<T> implements Storage<T> {
     @Override
     public Optional<T> find(String key) {
         return Optional.ofNullable(memTable.get(key))
-                .or(() -> {
-                    LOGGER.info("Memtable에 해당 key(%S)가 존재하지 않아 SS-Table 탐색".formatted(key));
-                    return searchInSSTable(key);
-                });
+                .or(() -> searchInSSTable(key));
     }
 
     private Optional<T> searchInSSTable(String key) {
+        LOGGER.info("Memtable에 해당 key(%S)가 존재하지 않아 SS-Table 탐색".formatted(key));
         for (int level = 1; level <= CompationLevel.maxLevel().value(); level++) {
             var results = searchKeyInLevelSSTables(CompationLevel.valueOf(level), key);
 
@@ -73,10 +71,9 @@ public class LsmTreeStorage<T> implements Storage<T> {
 
     private Optional<T> searchKeyInLevelSSTables(CompationLevel level, String key) {
         var levelPath = Path.of(createDirectoryPath(level));
-        List<File> sstables = getSSTables(levelPath);
 
-        for (var sstable : sstables) {
-            Optional<T> result = fileSystemAccess.get(sstable, key);
+        for (var ssTable : ssTables(levelPath)) {
+            Optional<T> result = fileSystemAccess.get(ssTable, key);
             if (result.isPresent()) {
                 return result;
             }
@@ -84,7 +81,7 @@ public class LsmTreeStorage<T> implements Storage<T> {
         return Optional.empty();
     }
 
-    private List<File> getSSTables(Path path) {
+    private List<File> ssTables(Path path) {
         try (Stream<Path> paths = fileSystemAccess.getDirectoryInFilePaths(path)) {
             return paths
                     .sorted(Comparator.reverseOrder())
