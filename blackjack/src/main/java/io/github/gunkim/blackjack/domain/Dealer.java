@@ -1,10 +1,27 @@
 package io.github.gunkim.blackjack.domain;
 
-public record Dealer(CardDeck deck) {
-    //TODO: 최초 블랙잭 시작 시 딜러는 플레이어에게 2장의 카드를 나눠줘야 함을 변수로 나타냄. 더 적절한 네이밍이 필요함.
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
+
+public class Dealer {
     public static final int CARD_DEAL = 2;
+
+    private final CardDeck deck;
+    private final Set<Card> cards;
+
+    public Dealer(CardDeck deck) {
+        Objects.requireNonNull(deck, "deck must not be null");
+
+        this.deck = deck;
+        this.cards = new HashSet<>(deck.draw(CARD_DEAL));
+    }
 
     public Player deal() {
         return new Player(deck.draw(CARD_DEAL));
+    }
+
+    public void hit(Player player) {
+        player.hit(deck.draw());
     }
 }
