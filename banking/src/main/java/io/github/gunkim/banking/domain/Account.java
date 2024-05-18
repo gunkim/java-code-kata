@@ -1,10 +1,16 @@
 package io.github.gunkim.banking.domain;
 
 public class Account {
+    private final AccountId id;
     private Money balance;
 
-    public Account(Money balance) {
+    public Account(AccountId id, Money balance) {
+        this.id = id;
         this.balance = balance;
+    }
+
+    public Account(Money balance) {
+        this(AccountId.createRandom(), balance);
     }
 
     public Money deposit(Money amount) {
