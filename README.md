@@ -18,6 +18,7 @@
 - [로또](lotto)
 - [행맨](hangman)
 - [문자열 계산기](string-calculator)
+- [뱅킹](banking)
 
 ### CS
 
