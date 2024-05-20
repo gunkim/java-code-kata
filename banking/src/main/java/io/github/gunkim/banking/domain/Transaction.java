@@ -29,16 +29,4 @@ public record Transaction(
     public int compareTo(Transaction transaction) {
         return this.createdAt.compareTo(transaction.createdAt);
     }
-
-    @Override
-    public String toString() {
-        return "Transaction{" +
-                "id=" + id +
-                ", accountId=" + accountId +
-                ", type=" + type +
-                ", amount=" + amount +
-                ", balance=" + balance +
-                ", createdAt=" + createdAt +
-                '}';
-    }
 }
