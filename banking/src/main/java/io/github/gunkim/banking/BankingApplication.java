@@ -9,6 +9,7 @@ import java.time.format.DateTimeFormatter;
 
 public class BankingApplication {
     private static final AccountId FIXED_MY_ACCOUNT_ID = AccountId.createRandom();
+    private static final String TRANSACTION_VIEW_FORMAT = "%-20s %-15s %-15s\n";
 
     public static void main(String[] args) {
         BankingApplication app = new BankingApplication();
@@ -36,9 +37,9 @@ public class BankingApplication {
     private void printTransactions(AccountTransactionManager accountTransactionManager) {
         final var formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
 
-        System.out.printf("%-20s %-15s %-15s\n", "Date", "Amount", "Balance");
+        System.out.printf(TRANSACTION_VIEW_FORMAT, "Date", "Amount", "Balance");
         for (Transaction transaction : accountTransactionManager.findAll(FIXED_MY_ACCOUNT_ID)) {
-            System.out.printf("%-20s %-15s %-15s\n",
+            System.out.printf(TRANSACTION_VIEW_FORMAT,
                     formatter.format(transaction.createdAt()),
                     transaction.signedAmount(),
                     transaction.balance());
