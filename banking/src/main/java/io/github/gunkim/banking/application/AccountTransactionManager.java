@@ -15,20 +15,27 @@ public class AccountTransactionManager {
         var account = findAccount(accountId);
         var depositedBalanceAmount = account.deposit(depositAmount);
 
-        accountRepository.save(account);
-        transactionRepository.save(Transaction.of(TransactionType.DEPOSIT, depositAmount, depositedBalanceAmount));
+        persist(account, createTransaction(TransactionType.DEPOSIT, depositAmount, depositedBalanceAmount));
     }
 
     public void withdraw(AccountId accountId, Money withdrawAmount) {
         var account = findAccount(accountId);
         var withdrawnBalanceAmount = account.withdraw(withdrawAmount);
 
-        accountRepository.save(account);
-        transactionRepository.save(Transaction.of(TransactionType.WITHDRAW, withdrawAmount, withdrawnBalanceAmount));
+        persist(account, createTransaction(TransactionType.WITHDRAW, withdrawAmount, withdrawnBalanceAmount));
+    }
+
+    private Transaction createTransaction(TransactionType type, Money withdrawAmount, Money withdrawnBalanceAmount) {
+        return Transaction.of(type, withdrawAmount, withdrawnBalanceAmount);
     }
 
     private Account findAccount(AccountId accountId) {
         return accountRepository.findById(accountId)
                 .orElseThrow(() -> new AccountNotFoundException("해당 account(%s)를 찾을 수 없습니다.".formatted(accountId)));
+    }
+
+    private void persist(Account account, Transaction transaction) {
+        accountRepository.save(account);
+        transactionRepository.save(transaction);
     }
 }
