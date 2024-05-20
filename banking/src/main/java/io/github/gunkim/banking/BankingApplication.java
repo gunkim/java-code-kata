@@ -34,13 +34,13 @@ public class BankingApplication {
     }
 
     private void printTransactions(AccountTransactionManager accountTransactionManager) {
-        final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
+        final var formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
 
         System.out.printf("%-20s %-15s %-15s\n", "Date", "Amount", "Balance");
         for (Transaction transaction : accountTransactionManager.findAll(FIXED_MY_ACCOUNT_ID)) {
             System.out.printf("%-20s %-15s %-15s\n",
                     formatter.format(transaction.createdAt()),
-                    transaction.amount(),
+                    transaction.signedAmount(),
                     transaction.balance());
         }
     }

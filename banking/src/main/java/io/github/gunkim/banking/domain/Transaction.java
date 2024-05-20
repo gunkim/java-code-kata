@@ -21,6 +21,10 @@ public record Transaction(
         );
     }
 
+    public String signedAmount() {
+        return type.prefix() + this.amount;
+    }
+
     @Override
     public int compareTo(Transaction transaction) {
         return this.createdAt.compareTo(transaction.createdAt);
