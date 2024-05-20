@@ -4,18 +4,37 @@ import java.time.LocalDateTime;
 
 public record Transaction(
         TransactionId id,
+        AccountId accountId,
         TransactionType type,
         Money amount,
         Money balance,
         LocalDateTime createdAt
-) {
-    public static Transaction of(TransactionType type, Money amount, Money balance) {
+) implements Comparable<Transaction> {
+    public static Transaction of(AccountId accountId, TransactionType type, Money amount, Money balance) {
         return new Transaction(
                 TransactionId.createRandom(),
+                accountId,
                 type,
                 amount,
                 balance,
                 LocalDateTime.now()
         );
+    }
+
+    @Override
+    public int compareTo(Transaction transaction) {
+        return this.createdAt.compareTo(transaction.createdAt);
+    }
+
+    @Override
+    public String toString() {
+        return "Transaction{" +
+                "id=" + id +
+                ", accountId=" + accountId +
+                ", type=" + type +
+                ", amount=" + amount +
+                ", balance=" + balance +
+                ", createdAt=" + createdAt +
+                '}';
     }
 }

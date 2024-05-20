@@ -2,6 +2,8 @@ package io.github.gunkim.banking.application;
 
 import io.github.gunkim.banking.domain.*;
 
+import java.util.List;
+
 public class AccountTransactionManager {
     private final AccountRepository accountRepository;
     private final TransactionRepository transactionRepository;
@@ -15,18 +17,22 @@ public class AccountTransactionManager {
         var account = findAccount(accountId);
         var depositedBalanceAmount = account.deposit(depositAmount);
 
-        persist(account, createTransaction(TransactionType.DEPOSIT, depositAmount, depositedBalanceAmount));
+        persist(account, createTransaction(accountId, TransactionType.DEPOSIT, depositAmount, depositedBalanceAmount));
     }
 
     public void withdraw(AccountId accountId, Money withdrawAmount) {
         var account = findAccount(accountId);
         var withdrawnBalanceAmount = account.withdraw(withdrawAmount);
 
-        persist(account, createTransaction(TransactionType.WITHDRAW, withdrawAmount, withdrawnBalanceAmount));
+        persist(account, createTransaction(accountId, TransactionType.WITHDRAW, withdrawAmount, withdrawnBalanceAmount));
     }
 
-    private Transaction createTransaction(TransactionType type, Money withdrawAmount, Money withdrawnBalanceAmount) {
-        return Transaction.of(type, withdrawAmount, withdrawnBalanceAmount);
+    public List<Transaction> findAll(AccountId accountId) {
+        return transactionRepository.findAllByAccountIdOrderByCreatedAtDesc(accountId);
+    }
+
+    private Transaction createTransaction(AccountId accountId, TransactionType type, Money withdrawAmount, Money withdrawnBalanceAmount) {
+        return Transaction.of(accountId, type, withdrawAmount, withdrawnBalanceAmount);
     }
 
     private Account findAccount(AccountId accountId) {

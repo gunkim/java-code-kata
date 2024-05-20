@@ -13,6 +13,10 @@ public class Account {
         this(AccountId.createRandom(), balance);
     }
 
+    public static Account zero(AccountId id) {
+        return new Account(id, Money.ZERO);
+    }
+
     public Money deposit(Money amount) {
         this.balance = this.balance.plus(amount);
 
@@ -26,6 +30,10 @@ public class Account {
         this.balance = this.balance.minus(amount);
 
         return this.balance;
+    }
+
+    public AccountId id() {
+        return id;
     }
 
     public Money balance() {
