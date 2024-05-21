@@ -3,7 +3,10 @@ package io.github.gunkim.banking;
 import io.github.gunkim.banking.application.AccountTransactionManager;
 import io.github.gunkim.banking.data.InMemoryAccountRepository;
 import io.github.gunkim.banking.data.InMemoryTransactionRepository;
-import io.github.gunkim.banking.domain.*;
+import io.github.gunkim.banking.domain.Account;
+import io.github.gunkim.banking.domain.AccountId;
+import io.github.gunkim.banking.domain.Money;
+import io.github.gunkim.banking.domain.Transaction;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -12,19 +15,23 @@ public class BankingApplication {
     private static final AccountId FIXED_MY_ACCOUNT_ID = AccountId.createRandom();
     private static final String TRANSACTION_VIEW_FORMAT = "%-20s %-15s %-15s\n";
 
+    private final AccountTransactionManager accountTransactionManager;
+
+    public BankingApplication(AccountTransactionManager accountTransactionManager) {
+        this.accountTransactionManager = accountTransactionManager;
+    }
+
     public static void main(String[] args) {
-        BankingApplication app = new BankingApplication();
+        var accountRepository = new InMemoryAccountRepository();
+        var transactionRepository = new InMemoryTransactionRepository();
+        accountRepository.save(Account.zero(FIXED_MY_ACCOUNT_ID));
+
+        var accountTransactionManager = new AccountTransactionManager(accountRepository, transactionRepository);
+        var app = new BankingApplication(accountTransactionManager);
         app.run();
     }
 
     public void run() {
-        AccountRepository accountRepository = new InMemoryAccountRepository();
-        accountRepository.save(Account.zero(FIXED_MY_ACCOUNT_ID));
-
-        TransactionRepository transactionRepository = new InMemoryTransactionRepository();
-
-        var accountTransactionManager = new AccountTransactionManager(accountRepository, transactionRepository);
-
         runTransactions(accountTransactionManager);
         printTransactions(accountTransactionManager.findAll(FIXED_MY_ACCOUNT_ID));
     }
