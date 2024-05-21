@@ -6,6 +6,7 @@ import io.github.gunkim.banking.data.InMemoryTransactionRepository;
 import io.github.gunkim.banking.domain.*;
 
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 public class BankingApplication {
     private static final AccountId FIXED_MY_ACCOUNT_ID = AccountId.createRandom();
@@ -25,7 +26,7 @@ public class BankingApplication {
         var accountTransactionManager = new AccountTransactionManager(accountRepository, transactionRepository);
 
         runTransactions(accountTransactionManager);
-        printTransactions(accountTransactionManager);
+        printTransactions(accountTransactionManager.findAll(FIXED_MY_ACCOUNT_ID));
     }
 
     private void runTransactions(AccountTransactionManager accountTransactionManager) {
@@ -34,11 +35,11 @@ public class BankingApplication {
         accountTransactionManager.deposit(FIXED_MY_ACCOUNT_ID, new Money(12_000));
     }
 
-    private void printTransactions(AccountTransactionManager accountTransactionManager) {
+    private void printTransactions(List<Transaction> transactions) {
         final var formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
 
         System.out.printf(TRANSACTION_VIEW_FORMAT, "Date", "Amount", "Balance");
-        for (Transaction transaction : accountTransactionManager.findAll(FIXED_MY_ACCOUNT_ID)) {
+        for (Transaction transaction : transactions) {
             System.out.printf(TRANSACTION_VIEW_FORMAT,
                     formatter.format(transaction.createdAt()),
                     transaction.signedAmount(),
