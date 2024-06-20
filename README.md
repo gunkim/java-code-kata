@@ -19,7 +19,3 @@
 - [행맨](hangman)
 - [문자열 계산기](string-calculator)
 - [뱅킹](banking)
-
-### CS
-
-- [데이터 시스템 구현 (LSM-Tree, B-Tree, Replication)](data-systems)
