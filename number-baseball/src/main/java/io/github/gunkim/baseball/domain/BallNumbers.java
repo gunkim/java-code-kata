@@ -19,7 +19,7 @@ public class BallNumbers {
             final BallNumber myBall = this.ballNumbers.get(i);
             final BallNumber otherBall = otherBalls.ballNumbers.get(i);
 
-            if (myBall.equals(otherBall)) {
+            if (isSameBallNumber(myBall, otherBall)) {
                 strike++;
             } else if (hasBallNumber(otherBall)) {
                 ball++;
@@ -27,6 +27,10 @@ public class BallNumbers {
         }
 
         return new Result(strike, ball);
+    }
+
+    private boolean isSameBallNumber(BallNumber myBall, BallNumber otherBall) {
+        return myBall.equals(otherBall);
     }
 
     private boolean hasBallNumber(final BallNumber ballNumber) {
