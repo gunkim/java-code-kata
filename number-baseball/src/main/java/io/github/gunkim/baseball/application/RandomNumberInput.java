@@ -22,7 +22,7 @@ public class RandomNumberInput implements Input {
     }
 
     private static List<BallNumber> generateRandomBallNumbers(final int ballCount) {
-        List<BallNumber> ballNumbers = new ArrayList<>(Arrays.stream(BallNumber.values()).toList());
+        final var ballNumbers = new ArrayList<>(Arrays.stream(BallNumber.values()).toList());
         Collections.shuffle(ballNumbers);
         return ballNumbers.subList(0, ballCount);
     }
