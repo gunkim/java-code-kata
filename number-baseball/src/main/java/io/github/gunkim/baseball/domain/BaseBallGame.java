@@ -1,7 +1,6 @@
 package io.github.gunkim.baseball.domain;
 
 public class BaseBallGame {
-
     private final Input userInput;
     private final Input computerInput;
     private final Output output;
@@ -30,7 +29,7 @@ public class BaseBallGame {
     }
 
     private boolean checkGameEnd(final Result result) {
-        if (result.isAllStrike()) {
+        if (result.isAllStrike(totalBallCount)) {
             output.gameEndedMessage(totalBallCount);
             return true;
         }

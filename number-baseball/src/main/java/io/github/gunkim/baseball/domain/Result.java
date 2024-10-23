@@ -4,8 +4,8 @@ public record Result(
         int strike,
         int ball
 ) {
-    public boolean isAllStrike() {
-        return ball == 0 && strike > 0;
+    public boolean isAllStrike(final int totalBallCount) {
+        return strike == totalBallCount;
     }
 
     public boolean isNothing() {
