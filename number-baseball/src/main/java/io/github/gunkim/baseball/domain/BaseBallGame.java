@@ -7,7 +7,7 @@ public class BaseBallGame {
     private final int totalBallCount;
     private final boolean displayAnswer;
 
-    public BaseBallGame(Input userInput, Input computerInput, Output output, int totalBallCount, boolean displayAnswer) {
+    public BaseBallGame(final Input userInput, final Input computerInput, final Output output, final int totalBallCount, final boolean displayAnswer) {
         this.userInput = userInput;
         this.computerInput = computerInput;
         this.output = output;

@@ -7,7 +7,7 @@ import static java.util.stream.Collectors.joining;
 public class BallNumbers {
     private final List<BallNumber> ballNumbers;
 
-    public BallNumbers(List<BallNumber> ballNumbers) {
+    public BallNumbers(final List<BallNumber> ballNumbers) {
         this.ballNumbers = ballNumbers;
     }
 
@@ -15,12 +15,12 @@ public class BallNumbers {
         int strike = 0, ball = 0;
 
         for (int i = 0; i < this.ballNumbers.size(); i++) {
-            final BallNumber userBall = this.ballNumbers.get(i);
-            final BallNumber computerBall = otherBalls.ballNumbers.get(i);
+            final BallNumber myBall = this.ballNumbers.get(i);
+            final BallNumber otherBall = otherBalls.ballNumbers.get(i);
 
-            if (userBall.equals(computerBall)) {
+            if (myBall.equals(otherBall)) {
                 strike++;
-            } else if (this.hasBallNumber(userBall)) {
+            } else if (this.hasBallNumber(myBall)) {
                 ball++;
             }
         }
@@ -28,7 +28,7 @@ public class BallNumbers {
         return new Result(strike, ball);
     }
 
-    private boolean hasBallNumber(BallNumber ballNumber) {
+    private boolean hasBallNumber(final BallNumber ballNumber) {
         return this.ballNumbers.contains(ballNumber);
     }
 

@@ -3,9 +3,9 @@ package io.github.gunkim.baseball.domain;
 public interface Output {
     void inputMessage();
 
-    void computerBallNumbers(BallNumbers ballNumbers);
+    void computerBallNumbers(final BallNumbers ballNumbers);
 
-    void gameEndedMessage(int ballCount);
+    void gameEndedMessage(final int ballCount);
 
     void nothingMessage();
 
