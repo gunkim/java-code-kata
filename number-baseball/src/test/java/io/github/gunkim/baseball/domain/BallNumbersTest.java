@@ -6,7 +6,10 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DisplayName("BallNumbers는")
 class BallNumbersTest {
@@ -47,11 +50,11 @@ class BallNumbersTest {
     }
 
     @Test
-    public void 숫자123과_숫자231은_1스트라이크_2볼이다() {
+    void 숫자123과_숫자231은_1스트라이크_2볼이다() {
         final var ballNumbers = new BallNumbers(Stream.of(1, 2, 3)
                 .map(BallNumber::of)
                 .toList());
-        final var otherBallNumbers = new BallNumbers(Stream.of(2, 3, 1)
+        final var otherBallNumbers = new BallNumbers(Stream.of(1, 3, 2)
                 .map(BallNumber::of)
                 .toList());
 

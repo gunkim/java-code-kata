@@ -21,7 +21,7 @@ public class BallNumbers {
 
             if (myBall.equals(otherBall)) {
                 strike++;
-            } else if (hasBallNumber(myBall)) {
+            } else if (hasBallNumber(otherBall)) {
                 ball++;
             }
         }

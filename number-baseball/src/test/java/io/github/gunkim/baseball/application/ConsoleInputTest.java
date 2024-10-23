@@ -28,7 +28,7 @@ class ConsoleInputTest {
     }
 
     @Test
-    void test() {
+    void 숫자_1에서_9_사이_숫자가_아닐_경우_예외가_발생한다() {
         final InputScanner mockInputScanner = () -> "abc";
         final ConsoleInput consoleInput = new ConsoleInput(mockInputScanner, 3);
 
