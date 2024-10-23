@@ -12,7 +12,8 @@ public class BallNumbers {
     }
 
     public Result match(final BallNumbers otherBalls) {
-        int strike = 0, ball = 0;
+        int strike = 0;
+        int ball = 0;
 
         for (int i = 0; i < this.ballNumbers.size(); i++) {
             final BallNumber myBall = this.ballNumbers.get(i);
@@ -20,7 +21,7 @@ public class BallNumbers {
 
             if (myBall.equals(otherBall)) {
                 strike++;
-            } else if (this.hasBallNumber(myBall)) {
+            } else if (hasBallNumber(myBall)) {
                 ball++;
             }
         }

@@ -2,6 +2,7 @@ package io.github.gunkim.baseball;
 
 import io.github.gunkim.baseball.application.ConsoleInput;
 import io.github.gunkim.baseball.application.ConsoleOutput;
+import io.github.gunkim.baseball.application.DefaultInputScanner;
 import io.github.gunkim.baseball.application.RandomNumberInput;
 import io.github.gunkim.baseball.domain.BaseBallGame;
 
@@ -11,7 +12,7 @@ public class Application {
 
     public static void main(final String[] args) {
         new BaseBallGame(
-                new ConsoleInput(TOTAL_BALL_COUNT),
+                new ConsoleInput(new DefaultInputScanner(), TOTAL_BALL_COUNT),
                 new RandomNumberInput(TOTAL_BALL_COUNT),
                 new ConsoleOutput(),
                 TOTAL_BALL_COUNT,
