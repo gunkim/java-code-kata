@@ -13,7 +13,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DisplayName("BallNumbers는")
 class BallNumbersTest {
-
     @Test
     void 모든_숫자가_같다면_올_스트라이크_노_낫싱이다() {
         final List<BallNumber> numbers = Stream.of(1, 2, 3)
