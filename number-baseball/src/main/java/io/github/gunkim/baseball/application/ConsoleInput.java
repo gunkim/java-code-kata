@@ -8,7 +8,7 @@ public class ConsoleInput implements Input {
     private final InputScanner inputScanner;
     private final int ballCount;
 
-    public ConsoleInput(InputScanner inputScanner, int ballCount) {
+    public ConsoleInput(final InputScanner inputScanner, final int ballCount) {
         this.inputScanner = inputScanner;
         this.ballCount = ballCount;
     }

@@ -26,7 +26,7 @@ public class ConsoleOutput implements Output {
     }
 
     @Override
-    public void strikeAndBallMessage(Result result) {
+    public void strikeAndBallMessage(final Result result) {
         System.out.printf("%d 스트라이크 %d 볼%n", result.strike(), result.ball());
     }
 }
