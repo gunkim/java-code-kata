@@ -31,12 +31,19 @@ class ConsoleOutput : Output {
     override fun showStatistics(results: Map<Rank, Int>) {
         println("당첨 통계")
         println("---------")
-        Rank.entries.reversed().forEach { showRank(it, results) }
+        Rank.entries.forEach { showRank(it, results) }
     }
 
     private fun showRank(rank: Rank, results: Map<Rank, Int>) {
         val resultCnt = results[rank] ?: return
-        val (reward, matchCnt) = rank
-        println("${matchCnt}개 일치 ($reward)-${resultCnt}개")
+        val reward = rank.reward
+
+        println("${rank.number}등 (${formatMoney(reward)}) - ${resultCnt}개")
+    }
+
+    private fun formatMoney(money: Int) = money.toString().replace(MONEY_PATTERN, "$1,")
+
+    companion object {
+        private val MONEY_PATTERN = Regex("(\\d)(?=(?:\\d{3})+(?!\\d))")
     }
 }
