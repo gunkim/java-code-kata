@@ -1,4 +1,4 @@
-package io.github.gunkim.ratelimiter.tokenbucket;
+package io.github.gunkim.ratelimiter.bucket;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,7 +8,16 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class TokenBucket implements AutoCloseable {
+/**
+ * ## 처리 제한 알고리즘, 토큰 버킷
+ * - 요청이 들어오면 토큰이 존재한다면 처리된다.
+ * - 토큰이 부족하다면 거부된다.
+ * - 일정 시간마다 토큰을 버킷 크기만큼 리필한다.
+ * <p>
+ * 구현이 쉬우며 많은 기업이 이용하고 있다. 하지만 안정적인 처리를 보장하진 못한다.
+ * 예를 들어, 초반에 트래픽이 몰려 모든 토큰이 소비된다면 이후 요청은 토큰이 리필될 때까지 처리되지 못한다.
+ */
+public class TokenBucket implements AutoCloseable, Bucket {
     private static final Logger logger = LoggerFactory.getLogger(TokenBucket.class);
 
     private final ScheduledExecutorService executorService;
@@ -23,6 +32,7 @@ public class TokenBucket implements AutoCloseable {
         logger.info("Token bucket created with size: {} and refill rate: {}", bucketSize, refillRate);
     }
 
+    @Override
     public void request(Runnable request) {
         int currentTokens;
         do {

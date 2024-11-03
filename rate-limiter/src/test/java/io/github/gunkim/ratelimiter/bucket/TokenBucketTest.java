@@ -1,4 +1,4 @@
-package io.github.gunkim.ratelimiter.tokenbucket;
+package io.github.gunkim.ratelimiter.bucket;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
