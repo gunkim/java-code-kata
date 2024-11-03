@@ -20,3 +20,7 @@
 - [문자열 계산기](string-calculator)
 - [뱅킹](banking)
 - [숫자야구](number-baseball)
+
+## Algorithm
+
+- [처리율 제한](rate-limiter)
