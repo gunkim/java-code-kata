@@ -23,47 +23,44 @@ class TokenBucketTest {
 
     @Test
     void 토큰이_없는_경우_요청이_무시된다() {
-        var tokenBucket = new TokenBucket(0, 20_000);
-        tokenBucket.request(request);
-        Mockito.verify(request, never()).run();
+        try (var tokenBucket = new TokenBucket(0, 20_000)) {
+            tokenBucket.request(request);
+            Mockito.verify(request, never()).run();
+        }
     }
 
     @Test
     void 토큰이_최대치일_때_모든_요청이_처리된다() {
-        var tokenBucket = new TokenBucket(10, 20_000);
-        for (int i = 0; i < 10; i++) {
-            tokenBucket.request(request);
+        try (var tokenBucket = new TokenBucket(10, 20_000)) {
+            for (int i = 0; i < 10; i++) {
+                tokenBucket.request(request);
+            }
+            Mockito.verify(request, times(10)).run();
         }
-        Mockito.verify(request, times(10)).run();
     }
 
     @Test
     void 토큰이_모두_사용된_후_나머지_요청이_무시된다() {
-        var tokenBucket = new TokenBucket(3, 20_000);
-        for (int i = 0; i < 6; i++) {
-            tokenBucket.request(request);
+        try (var tokenBucket = new TokenBucket(3, 20_000)) {
+            for (int i = 0; i < 6; i++) {
+                tokenBucket.request(request);
+            }
+            Mockito.verify(request, times(3)).run();
         }
-        Mockito.verify(request, times(3)).run();
     }
 
     @Test
-    void 단일_스레드_환경에서_정상_작동한다() {
-        var tokenBucket = new TokenBucket(5, 1000);
-        for (int i = 0; i < 7; i++) {
-            tokenBucket.request(request);
+    void 다중_스레드_환경에서_정상_작동한다() {
+        try (var tokenBucket = new TokenBucket(100, 5_000)) {
+            ExecutorService taskExecutor = Executors.newFixedThreadPool(10);
+            for (int i = 0; i < 150; i++) {
+                taskExecutor.execute(() -> tokenBucket.request(request));
+            }
+            taskExecutor.shutdown();
+            taskExecutor.awaitTermination(1_000, TimeUnit.MILLISECONDS);
+            Mockito.verify(request, times(100)).run();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
-        Mockito.verify(request, times(5)).run();
-    }
-
-    @Test
-    void 다중_스레드_환경에서_정상_작동한다() throws InterruptedException {
-        var tokenBucket = new TokenBucket(100, 5_000);
-        ExecutorService taskExecutor = Executors.newFixedThreadPool(10);
-        for (int i = 0; i < 150; i++) {
-            taskExecutor.execute(() -> tokenBucket.request(request));
-        }
-        taskExecutor.shutdown();
-        taskExecutor.awaitTermination(1000, TimeUnit.MILLISECONDS);
-        Mockito.verify(request, times(100)).run();
     }
 }
