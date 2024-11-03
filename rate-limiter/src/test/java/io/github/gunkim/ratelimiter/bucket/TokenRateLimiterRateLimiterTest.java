@@ -13,7 +13,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 
 @DisplayName("TokenBucket은")
-class TokenBucketRateLimiterTest {
+class TokenRateLimiterRateLimiterTest {
     private Runnable request;
 
     @BeforeEach
@@ -23,7 +23,7 @@ class TokenBucketRateLimiterTest {
 
     @Test
     void 토큰이_없는_경우_요청이_무시된다() {
-        try (var tokenBucket = new TokenBucketRateLimiter(0, 20_000)) {
+        try (var tokenBucket = new TokenRateLimiterRateLimiter(0, 20_000)) {
             tokenBucket.request(request);
             Mockito.verify(request, never()).run();
         }
@@ -31,7 +31,7 @@ class TokenBucketRateLimiterTest {
 
     @Test
     void 토큰이_최대치일_때_모든_요청이_처리된다() {
-        try (var tokenBucket = new TokenBucketRateLimiter(10, 20_000)) {
+        try (var tokenBucket = new TokenRateLimiterRateLimiter(10, 20_000)) {
             for (int i = 0; i < 10; i++) {
                 tokenBucket.request(request);
             }
@@ -41,7 +41,7 @@ class TokenBucketRateLimiterTest {
 
     @Test
     void 토큰이_모두_사용된_후_나머지_요청이_무시된다() {
-        try (var tokenBucket = new TokenBucketRateLimiter(3, 20_000)) {
+        try (var tokenBucket = new TokenRateLimiterRateLimiter(3, 20_000)) {
             for (int i = 0; i < 6; i++) {
                 tokenBucket.request(request);
             }
@@ -51,7 +51,7 @@ class TokenBucketRateLimiterTest {
 
     @Test
     void 다중_스레드_환경에서_정상_작동한다() {
-        try (var tokenBucket = new TokenBucketRateLimiter(100, 5_000)) {
+        try (var tokenBucket = new TokenRateLimiterRateLimiter(100, 5_000)) {
             ExecutorService taskExecutor = Executors.newFixedThreadPool(10);
             for (int i = 0; i < 150; i++) {
                 taskExecutor.execute(() -> tokenBucket.request(request));

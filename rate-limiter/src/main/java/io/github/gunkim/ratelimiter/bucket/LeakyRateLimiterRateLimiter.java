@@ -1,5 +1,6 @@
 package io.github.gunkim.ratelimiter.bucket;
 
+import io.github.gunkim.ratelimiter.RateLimiter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,8 +18,8 @@ import java.util.concurrent.TimeUnit;
  * <p>
  * 고정된 처리율로 안정적인 트래픽 처리엔 좋지만, 트래픽이 몰리게 되면 요청이 버려질 수 있음.
  */
-public class LeakyBucketRateLimiter implements AutoCloseable, Bucket {
-    private static final Logger logger = LoggerFactory.getLogger(LeakyBucketRateLimiter.class);
+public class LeakyRateLimiterRateLimiter implements AutoCloseable, RateLimiter {
+    private static final Logger logger = LoggerFactory.getLogger(LeakyRateLimiterRateLimiter.class);
 
     private final Queue<Runnable> queue;
     private final int bucketSize;
@@ -26,7 +27,7 @@ public class LeakyBucketRateLimiter implements AutoCloseable, Bucket {
 
     private final ScheduledExecutorService executorService;
 
-    public LeakyBucketRateLimiter(int bucketSize, long scheduleInterval, int batchSize) {
+    public LeakyRateLimiterRateLimiter(int bucketSize, long scheduleInterval, int batchSize) {
         this.bucketSize = bucketSize;
         this.batchSize = batchSize;
 

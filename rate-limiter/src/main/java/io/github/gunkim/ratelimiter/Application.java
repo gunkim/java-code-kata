@@ -1,14 +1,14 @@
 package io.github.gunkim.ratelimiter;
 
 
-import io.github.gunkim.ratelimiter.bucket.TokenBucketRateLimiter;
+import io.github.gunkim.ratelimiter.bucket.TokenRateLimiterRateLimiter;
 
 public class Application {
     public static void main(String[] args) {
         //4초에 2개 요청에 대한 처리율 제한 설정
         final int bucketSize = 20;
         final long refillRate = 60_000L;
-        var bucket = new TokenBucketRateLimiter(bucketSize, refillRate);
+        var bucket = new TokenRateLimiterRateLimiter(bucketSize, refillRate);
 
         while (true) {
             processRequest(bucket);
@@ -16,7 +16,7 @@ public class Application {
         }
     }
 
-    private static void processRequest(TokenBucketRateLimiter bucket) {
+    private static void processRequest(TokenRateLimiterRateLimiter bucket) {
         bucket.request(() -> System.out.println("Request"));
     }
 
