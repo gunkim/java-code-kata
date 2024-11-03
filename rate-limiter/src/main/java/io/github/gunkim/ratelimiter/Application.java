@@ -1,6 +1,7 @@
 package io.github.gunkim.ratelimiter;
 
-import io.github.gunkim.ratelimiter.tokenbucket.TokenBucket;
+
+import io.github.gunkim.ratelimiter.bucket.TokenBucket;
 
 public class Application {
     public static void main(String[] args) {
