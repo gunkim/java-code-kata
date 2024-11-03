@@ -17,13 +17,13 @@ import java.util.concurrent.atomic.AtomicInteger;
  * 구현이 쉬우며 많은 기업이 이용하고 있다. 하지만 안정적인 처리를 보장하진 못한다.
  * 예를 들어, 초반에 트래픽이 몰려 모든 토큰이 소비된다면 이후 요청은 토큰이 리필될 때까지 처리되지 못한다.
  */
-public class TokenBucket implements AutoCloseable, Bucket {
-    private static final Logger logger = LoggerFactory.getLogger(TokenBucket.class);
+public class TokenBucketRateLimiter implements AutoCloseable, Bucket {
+    private static final Logger logger = LoggerFactory.getLogger(TokenBucketRateLimiter.class);
 
     private final ScheduledExecutorService executorService;
     private final AtomicInteger tokens;
 
-    public TokenBucket(int bucketSize, long refillRate) {
+    public TokenBucketRateLimiter(int bucketSize, long refillRate) {
         this.executorService = Executors.newSingleThreadScheduledExecutor();
         this.tokens = new AtomicInteger(bucketSize);
 

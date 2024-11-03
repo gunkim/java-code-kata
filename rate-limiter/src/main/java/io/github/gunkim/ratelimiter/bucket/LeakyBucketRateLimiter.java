@@ -17,8 +17,8 @@ import java.util.concurrent.TimeUnit;
  * <p>
  * 고정된 처리율로 안정적인 트래픽 처리엔 좋지만, 트래픽이 몰리게 되면 요청이 버려질 수 있음.
  */
-public class LeakyBucket implements AutoCloseable, Bucket {
-    private static final Logger logger = LoggerFactory.getLogger(LeakyBucket.class);
+public class LeakyBucketRateLimiter implements AutoCloseable, Bucket {
+    private static final Logger logger = LoggerFactory.getLogger(LeakyBucketRateLimiter.class);
 
     private final Queue<Runnable> queue;
     private final int bucketSize;
@@ -26,7 +26,7 @@ public class LeakyBucket implements AutoCloseable, Bucket {
 
     private final ScheduledExecutorService executorService;
 
-    public LeakyBucket(int bucketSize, long scheduleInterval, int batchSize) {
+    public LeakyBucketRateLimiter(int bucketSize, long scheduleInterval, int batchSize) {
         this.bucketSize = bucketSize;
         this.batchSize = batchSize;
 
