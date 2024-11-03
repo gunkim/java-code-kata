@@ -17,7 +17,7 @@ public class Application {
     }
 
     private static void processRequest(TokenRateLimiterRateLimiter bucket) {
-        bucket.request(() -> System.out.println("Request"));
+        bucket.handleRequest(() -> System.out.println("Request"));
     }
 
     private static void sleep(long millis) {

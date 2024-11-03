@@ -17,7 +17,7 @@ public class FixedWindowRateLimiter implements RateLimiter {
     }
 
     @Override
-    public void request(Runnable request) {
+    public void handleRequest(Runnable request) {
         long currentTimeMillis = Instant.now().toEpochMilli();
         long currentWindowKey = currentTimeMillis / windowDurationMillis;
 

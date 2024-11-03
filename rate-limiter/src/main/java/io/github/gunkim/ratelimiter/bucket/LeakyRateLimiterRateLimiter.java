@@ -38,7 +38,7 @@ public class LeakyRateLimiterRateLimiter implements AutoCloseable, RateLimiter {
     }
 
     @Override
-    public void request(Runnable request) {
+    public void handleRequest(Runnable request) {
         if (isFull()) {
             logger.trace("bucket is full!");
             return;

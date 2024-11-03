@@ -34,7 +34,7 @@ public class TokenRateLimiterRateLimiter implements AutoCloseable, RateLimiter {
     }
 
     @Override
-    public void request(Runnable request) {
+    public void handleRequest(Runnable request) {
         int currentTokens;
         do {
             currentTokens = tokens.get();

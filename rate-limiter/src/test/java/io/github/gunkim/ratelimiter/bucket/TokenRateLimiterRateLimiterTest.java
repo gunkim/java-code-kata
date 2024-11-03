@@ -24,7 +24,7 @@ class TokenRateLimiterRateLimiterTest {
     @Test
     void 토큰이_없는_경우_요청이_무시된다() {
         try (var tokenBucket = new TokenRateLimiterRateLimiter(0, 20_000)) {
-            tokenBucket.request(request);
+            tokenBucket.handleRequest(request);
             Mockito.verify(request, never()).run();
         }
     }
@@ -33,7 +33,7 @@ class TokenRateLimiterRateLimiterTest {
     void 토큰이_최대치일_때_모든_요청이_처리된다() {
         try (var tokenBucket = new TokenRateLimiterRateLimiter(10, 20_000)) {
             for (int i = 0; i < 10; i++) {
-                tokenBucket.request(request);
+                tokenBucket.handleRequest(request);
             }
             Mockito.verify(request, times(10)).run();
         }
@@ -43,7 +43,7 @@ class TokenRateLimiterRateLimiterTest {
     void 토큰이_모두_사용된_후_나머지_요청이_무시된다() {
         try (var tokenBucket = new TokenRateLimiterRateLimiter(3, 20_000)) {
             for (int i = 0; i < 6; i++) {
-                tokenBucket.request(request);
+                tokenBucket.handleRequest(request);
             }
             Mockito.verify(request, times(3)).run();
         }
@@ -54,7 +54,7 @@ class TokenRateLimiterRateLimiterTest {
         try (var tokenBucket = new TokenRateLimiterRateLimiter(100, 5_000)) {
             ExecutorService taskExecutor = Executors.newFixedThreadPool(10);
             for (int i = 0; i < 150; i++) {
-                taskExecutor.execute(() -> tokenBucket.request(request));
+                taskExecutor.execute(() -> tokenBucket.handleRequest(request));
             }
             taskExecutor.shutdown();
             taskExecutor.awaitTermination(1_000, TimeUnit.MILLISECONDS);

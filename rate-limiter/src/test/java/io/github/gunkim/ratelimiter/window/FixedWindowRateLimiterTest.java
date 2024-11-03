@@ -21,7 +21,7 @@ class FixedWindowRateLimiterTest {
     void window_size_이내_요청은_처리된다() {
         Runnable runnable = mock(Runnable.class);
         FixedWindowRateLimiter rateLimiter = createRateLimiter(10);
-        rateLimiter.request(runnable);
+        rateLimiter.handleRequest(runnable);
         verify(runnable, times(1)).run();
     }
 
@@ -52,7 +52,7 @@ class FixedWindowRateLimiterTest {
 
     private void sendRequests(FixedWindowRateLimiter rateLimiter, Runnable request, int requestCount) {
         for (int i = 0; i < requestCount; i++) {
-            rateLimiter.request(request);
+            rateLimiter.handleRequest(request);
         }
     }
 }
