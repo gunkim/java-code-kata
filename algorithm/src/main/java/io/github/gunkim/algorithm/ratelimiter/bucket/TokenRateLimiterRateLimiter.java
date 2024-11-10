@@ -1,6 +1,6 @@
-package io.github.gunkim.ratelimiter.bucket;
+package io.github.gunkim.algorithm.ratelimiter.bucket;
 
-import io.github.gunkim.ratelimiter.RateLimiter;
+import io.github.gunkim.algorithm.ratelimiter.RateLimiter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

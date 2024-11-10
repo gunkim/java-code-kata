@@ -1,5 +1,6 @@
-package io.github.gunkim.ratelimiter.bucket;
+package io.github.gunkim.algorithm.ratelimiter.bucket;
 
+import io.github.gunkim.algorithm.ratelimiter.bucket.TokenRateLimiterRateLimiter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

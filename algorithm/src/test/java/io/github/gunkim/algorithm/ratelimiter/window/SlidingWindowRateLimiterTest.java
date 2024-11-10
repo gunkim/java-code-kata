@@ -1,4 +1,4 @@
-package io.github.gunkim.ratelimiter.window;
+package io.github.gunkim.algorithm.ratelimiter.window;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

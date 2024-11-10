@@ -1,6 +1,6 @@
-package io.github.gunkim.ratelimiter.window;
+package io.github.gunkim.algorithm.ratelimiter.window;
 
-import io.github.gunkim.ratelimiter.RateLimiter;
+import io.github.gunkim.algorithm.ratelimiter.RateLimiter;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
