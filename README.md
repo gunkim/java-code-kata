@@ -23,4 +23,4 @@
 
 ## Algorithm
 
-- [처리율 제한](rate-limiter)
+- [처리율 제한](algorithm/src/main/java/io/github/gunkim/algorithm/ratelimiter)
