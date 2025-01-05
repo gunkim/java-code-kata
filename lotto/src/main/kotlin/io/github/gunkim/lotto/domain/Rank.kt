@@ -3,7 +3,7 @@ package io.github.gunkim.lotto.domain
 enum class Rank(
     val reward: Int,
     val matchCnt: Int,
-    val number: Int,
+    val number: Int
 ) {
     FIRST(2_000_000_000, 6, 1),
     SECOND(30_000_000, 5, 2),

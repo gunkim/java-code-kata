@@ -1,7 +1,7 @@
 package io.github.gunkim.lotto.domain
 
 data class LottoMachine(
-    private val factory: CreateLottoPolicy,
+    private val factory: CreateLottoPolicy
 ) {
     fun buy(money: Int): List<Lotto> {
         require(money >= PRICE) { "한장도 살 수 없는 금액입니다." }
