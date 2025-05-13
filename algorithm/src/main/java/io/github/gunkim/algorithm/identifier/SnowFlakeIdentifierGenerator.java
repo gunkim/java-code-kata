@@ -42,7 +42,7 @@ public final class SnowFlakeIdentifierGenerator {
     }
 
     public synchronized SnowFlakeIdentifier nextId() {
-        long timestamp = System.currentTimeMillis() - epoch;
+        long timestamp = currentTimestamp();
 
         if (timestamp < lastTimestamp) {
             throw new RuntimeException("시스템 시계가 이전 시간으로 되돌아갔습니다");
@@ -62,10 +62,14 @@ public final class SnowFlakeIdentifierGenerator {
     }
 
     private long tilNextMillis(long lastTimestamp) {
-        long timestamp = System.currentTimeMillis() - epoch;
+        long timestamp = currentTimestamp();
         while (timestamp <= lastTimestamp) {
-            timestamp = System.currentTimeMillis() - epoch;
+            timestamp = currentTimestamp();
         }
         return timestamp;
+    }
+
+    private long currentTimestamp() {
+        return System.currentTimeMillis() - epoch;
     }
 }
