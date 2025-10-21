@@ -16,11 +16,9 @@ plugins {
 rootProject.name = "code-kata"
 
 include("lotto")
-include("rabbit-game")
 include("hangman")
 include("car-racing")
 include("string-calculator")
-include("blackjack")
 include("banking")
 include("number-baseball")
 include("algorithm")
