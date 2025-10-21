@@ -49,7 +49,7 @@ public class ArrayList<T> implements List<T> {
             expandArrayIfFull(requiredSize * DEFAULT_ARRAY_EXPANSION_FACTOR);
         }
 
-        System.arraycopy(array, index, array, index + collection.size(), collection.size());
+        System.arraycopy(array, index, array, index + collection.size(), size - index);
         size += collection.size();
 
         var i = index;
@@ -120,7 +120,7 @@ public class ArrayList<T> implements List<T> {
 
     @Override
     public int indexOf(Object o) {
-        for (int i = 0; i < array.length; i++) {
+        for (int i = 0; i < size; i++) {
             var element = array[i];
 
             if (element.equals(o)) {
@@ -132,7 +132,7 @@ public class ArrayList<T> implements List<T> {
 
     @Override
     public int lastIndexOf(Object o) {
-        for (int i = array.length - 1; i >= 0; i--) {
+        for (int i = size - 1; i >= 0; i--) {
             var element = array[i];
 
             if (element.equals(o)) {
@@ -198,22 +198,22 @@ public class ArrayList<T> implements List<T> {
 
     @Override
     public ListIterator listIterator() {
-        throw new RuntimeException("Not implemented");
+        throw new UnsupportedOperationException("Not implemented");
     }
 
     @Override
     public ListIterator listIterator(int index) {
-        throw new RuntimeException("Not implemented");
+        throw new UnsupportedOperationException("Not implemented");
     }
 
     @Override
     public List<T> subList(int fromIndex, int toIndex) {
-        throw new RuntimeException("Not implemented");
+        throw new UnsupportedOperationException("Not implemented");
     }
 
     @Override
     public boolean retainAll(Collection c) {
-        throw new RuntimeException("Not implemented");
+        throw new UnsupportedOperationException("Not implemented");
     }
 
     private void addData(T data) {
